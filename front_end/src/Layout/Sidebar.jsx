@@ -72,6 +72,34 @@ const navItems = [
     },
     
     {
+      id:11,
+      text: "Product Module",
+      icon: null,
+    },
+  
+    {
+      id:13,
+      text: "Product",
+      icon: <CoffeeMakerOutlined />,
+    },
+    {
+      id:14,
+      text: "Subscription",
+      icon: <SubscriptionsOutlined />,
+    },
+    {
+        id:1001111,
+        text: "Advertisement",
+        icon: <Subscriptions />,
+      },
+
+      {
+        id:100,
+        text: "Review & Rating",
+        icon: <ReviewsOutlined />,
+      },
+   
+    {
       id:7,
       text: "Order Module",
       icon: null,
@@ -96,34 +124,6 @@ const navItems = [
         text: "Delivery",
         icon: <DeliveryDiningOutlined />,
       },
-    {
-      id:11,
-      text: "Product Module",
-      icon: null,
-    },
-  
-    {
-      id:13,
-      text: "Coffee",
-      icon: <CoffeeMakerOutlined />,
-    },
-    {
-      id:14,
-      text: "Subscription",
-      icon: <SubscriptionsOutlined />,
-    },
-    {
-        id:1001111,
-        text: "Advertisement",
-        icon: <Subscriptions />,
-      },
-
-      {
-        id:100,
-        text: "Review & Rating",
-        icon: <ReviewsOutlined />,
-      },
-   
    
     {
       id:23,

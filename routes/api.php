@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +31,5 @@ Route::put('/roles/{id}', [AuthController::class,'editRole']);
 Route::put('/users/{id}', [AuthController::class, 'update']);
 Route::delete('/users/{id}', [AuthController::class, 'delete']);
 Route::delete('/roles/{id}', [AuthController::class, 'deleteRole']);
+
+Route::resource('products', ProductController::class);

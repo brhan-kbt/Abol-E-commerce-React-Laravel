@@ -3,6 +3,7 @@ import CoffeeBrand from "./admin/CoffeeBrand";
 import Customer from "./admin/Customer";
 import Dashboard from "./admin/Dashboard";
 import Overview from "./admin/Overview";
+import Coffee from "./admin/ProductModule/Coffee";
 import Role from "./admin/Roles";
 import GuestLayout from "./components/GuestLayout";
 import Layout from "./Layout/Layout";
@@ -40,6 +41,12 @@ const router = createBrowserRouter([
       {
         path: "/roles",
         element: <Role />,
+      },
+
+      
+      {
+        path: "/product",
+        element: <Coffee />,
       },
      
     ],
