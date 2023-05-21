@@ -1,9 +1,9 @@
-import { Route, Router, Routes } from 'react-router-dom'
-import Dashboard from './admin/Dashboard'
-import './App.css'
+import { Route, Router, RouterProvider, Routes } from 'react-router-dom'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
+import { ContextProvider } from './contexts/ContextProvider'
 import Layout from './Layout/Layout'
+import router from './router'
 import Home from './views/Home'
 import Login from './views/Login'
 import Register from './views/Register'
@@ -11,21 +11,11 @@ import Register from './views/Register'
 function App() {
  
   return (
-    <>
-	<body className='bg-gray-50'>
-		{/* <Navbar/> */}
-		<Routes>
-            <Route path='/' element={<Home />}/>
-            <Route path='/login' element={<Login />}/>
-            <Route path='/register' element={<Register />}/>
-			<Route element={<Layout />}>
-                <Route path='/dashboard' element={<Dashboard />} />
-			</Route>
-		</Routes>
-		{/* <Footer/> */}
-	</body>
-
-	</>
+		<>
+		<ContextProvider>
+		<RouterProvider router={router}/>
+		</ContextProvider>
+		</>
   )
 }
 

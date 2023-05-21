@@ -53,15 +53,21 @@ const navItems = [
       text: "Users Module",
       icon: null,
     },
-    {
-      id:3,
-      text: "Overview",
-      icon: <PointOfSaleOutlined />,
-    },
     
     {
       id:4,
-      text: "Users",
+      text: "Customers",
+      icon: <Groups2Outlined />,
+    },
+
+    {
+      id:498,
+      text: "Coffee_Brand",
+      icon: <Groups2Outlined />,
+    },
+    {
+      id:4980,
+      text: "Roles",
       icon: <Groups2Outlined />,
     },
     
@@ -81,7 +87,7 @@ const navItems = [
       icon: <RecentActors />,
     },
     {
-      id:10,
+      id:110000,
       text: "Payment",
       icon: <ReceiptLongOutlined />,
     },
@@ -95,11 +101,7 @@ const navItems = [
       text: "Product Module",
       icon: null,
     },
-    {
-      id:12,
-      text: "Overview",
-      icon: <PointOfSaleOutlined />,
-    },
+  
     {
       id:13,
       text: "Coffee",
@@ -111,7 +113,7 @@ const navItems = [
       icon: <SubscriptionsOutlined />,
     },
     {
-        id:100,
+        id:1001111,
         text: "Advertisement",
         icon: <Subscriptions />,
       },

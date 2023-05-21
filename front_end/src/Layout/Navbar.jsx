@@ -8,6 +8,7 @@ import {
     Search,
     SettingsOutlined,
     ArrowDropDownOutlined,
+    LogoutOutlined,
   } from "@mui/icons-material";
 
 import {
@@ -24,17 +25,36 @@ import {
   } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import FlexBetween from '../components/FlexBetween';
+import { useStateContext } from '../contexts/ContextProvider';
 
   const Navbar = ({isSidebarOpen, setIsSidebarOpen }) => {
     const router=useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
     const isOpen = Boolean(anchorEl);
     const handleClick = (event) => setAnchorEl(event.currentTarget);
+    const handleLogout = () => {
+      localStorage.removeItem('abol_token')
+       router('/login');
+    }
+    const handleSetting = () => {
+      // localStorage.removeItem('abol_token')
+      //  router('/login');
+    }
+    
     const handleClose = () => {
       setAnchorEl(null);
-      localStorage.removeItem('aboltoken')
-    //   router('/login');
+      // localStorage.removeItem('abol_token')
+      //  router('/login');
     }
+
+   const {currentUser,setCurrentUser} = useStateContext();
+
+   const storedUser = currentUser;
+   
+   console.log(storedUser);
+   console.log(storedUser.username);
+ 
+
     
   return (
     <AppBar
@@ -98,13 +118,13 @@ import FlexBetween from '../components/FlexBetween';
                   fontSize="0.85rem"
                 //   sx={{ color: theme.palette.secondary[0] }}
                 >
-                  Berhanu
+                  {storedUser.username}
                 </Typography>
                 <Typography
                   fontSize="0.75rem"
                 //   sx={{ color: theme.palette.secondary[0] }}
                 >
-                  Software Developer
+                  {/* {storedUser.role_id} */}
                 </Typography>
               </Box>
               <ArrowDropDownOutlined
@@ -113,11 +133,12 @@ import FlexBetween from '../components/FlexBetween';
             </Button>
             <Menu
               anchorEl={anchorEl}
+              onClick={handleClose}
               open={isOpen}
-              onClose={handleClose}
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             >
-              <MenuItem onClick={handleClose}>Log Out</MenuItem>
+              <MenuItem onClick={handleSetting}><SettingsOutlined sx={{mr:'1rem'}}/> Settings</MenuItem>
+              <MenuItem onClick={handleLogout}><LogoutOutlined sx={{mr:'1rem'}}/>Log Out</MenuItem>
             </Menu>
           </FlexBetween>
         </FlexBetween>

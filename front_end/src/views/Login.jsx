@@ -1,65 +1,81 @@
 // import { LockClosedIcon } from "@heroicons/react/20/solid";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import logo from '../assets/tlogo1.png';
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axiosClient from "../axios";
+import { useStateContext } from "../contexts/ContextProvider";
 
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState({ __html: "" });
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    remember: false, // Initialize remember to false
+  });
+  const {currentUser,userToken,setCurrentUser,setUserToken} = useStateContext();
 
-//   const onSubmit = (ev) => {
-//     ev.preventDefault();
-//     setError({ __html: "" });
+  const router=useNavigate();
 
-//     axiosClient
-//       .post("/login", {
-//         email,
-//         password,
-//       })
-//       .then(({ data }) => {
-//         setCurrentUser(data.user);
-//         setUserToken(data.token);
-//       })
-//       .catch((error) => {
-//         if (error.response) {
-//           const finalErrors = Object.values(error.response.data.errors).reduce(
-//             (accum, next) => [...accum, ...next],
-//             []
-//           );
-//           setError({ __html: finalErrors.join("<br>") });
-//         }
-//         console.error(error);
-//       });
-//   };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => {
+      return {
+        ...prevFormData,
+        [name]: value,
+      };
+    });
+  };
+
+  const handleRememberChange = (e) => {
+    const { name, checked } = e.target;
+    setFormData((prevFormData) => {
+      return {
+        ...prevFormData,
+        [name]: checked,
+      };
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    console.log(formData);
+
+    axiosClient
+      .post("/login", formData)
+      .then((response) => {
+        // Handle successful login
+        console.log(response.data);
+        setCurrentUser(response.data.user)
+        setUserToken(response.data.token)
+        router('/dashboard')
+      })
+      .catch((error) => {
+        // Handle login error
+        console.error(error.response.data);
+      });
+  };
 
   return (
    <>
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-20 w-auto"
-            src={logo}
-            alt="Your Company"
-          />
+    
+
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Sign in to your account
           </h2>
-        </div>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm rounded-lg shadow-lg p-10 pt-0">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                Email address
+              <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+              Username
               </label>
               <div className="mt-2">
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
+                  id="username"
+                  name="username"
+                  type="username"
+                  autoComplete="username"
+                  value={formData.username}
+                  onChange={handleInputChange}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -77,10 +93,28 @@ export default function Login() {
                   id="password"
                   name="password"
                   type="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
                   autoComplete="current-password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+              </div>
+              <div className="flex items-center mt-3">
+                <input
+                  id="remember-me"
+                  name="remember"
+                  type="checkbox"
+                  checked={formData.remember}
+                  onChange={handleRememberChange}
+                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                />
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-sm text-gray-900"
+                >
+                  Remember me
+                </label>
               </div>
                 <div className="text-sm mt-3">
                   <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
@@ -106,7 +140,6 @@ export default function Login() {
             </Link>
           </p>
         </div>
-      </div>
    </>
   );
 }

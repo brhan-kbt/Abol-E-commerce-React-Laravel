@@ -1,6 +1,7 @@
 import { Box, useMediaQuery } from '@mui/material'
 import React,{useState} from 'react'
-import {Outlet} from 'react-router-dom'
+import {Navigate, Outlet} from 'react-router-dom'
+import { useStateContext } from '../contexts/ContextProvider'
 import Navbar from './Navbar'
 // import {useSelector} from 'react-redux'
 import Sidebar from './Sidebar'
@@ -11,6 +12,12 @@ import Sidebar from './Sidebar'
 const Layout = () => {
   const isNonMobile=useMediaQuery("(min-width:760px)");
   const [isSidebarOpen,setIsSidebarOpen]=useState(true);
+
+
+  const {userToken}=useStateContext();
+  if (!userToken) {
+    return  <Navigate to='/login'/>
+  }
 //   const userId=useSelector((state)=>state.global.userId);
 //   const {data}=useGetUserQuery(userId);
 //   console.log('data',data);
@@ -32,6 +39,7 @@ const Layout = () => {
           setIsSidebarOpen={setIsSidebarOpen}
         />
         <Outlet/>
+
       </Box>
     </Box>
   )
