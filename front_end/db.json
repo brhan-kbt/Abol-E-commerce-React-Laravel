@@ -1,0 +1,206 @@
+{
+  "users": [
+    {
+      "email": "gtntsileshi@gmail.com",
+      "password": "$2a$10$3hUcfGEmIjmo7wu.KYi2Ce6Es2rWJpNcifPenZLYMNkMtzjd8.pRm",
+      "id": 1
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "title": "This a coffee from Bonga, South West Ethiopia",
+      "description": "What does it feel like to witness climate change playing out in real-time? #notcool. Sound the alarm with our Women's Climate Change T-shirt, printed on organic cotton in our Carbon Neutral factory. Plus, when it's worn out you can send it back to us to be remade into something new. That's what real sustainability means to us.",
+      "image": "src/assets/bonga.jpg",
+      "amount": "200",
+      "rating": "4.0"
+    },
+    {
+      "id": 2,
+      "title": "This a coffee from Jimma, South West Ethiopia",
+      "description": "What does it feel like to witness climate change playing out in real-time? #notcool. Sound the alarm with our Women's Climate Change T-shirt, printed on organic cotton in our Carbon Neutral factory. Plus, when it's worn out you can send it back to us to be remade into something new. That's what real sustainability means to us.",
+      "image": "src/assets/jimma.jpg",
+      "amount": "200",
+      "rating": "4.0"
+    },
+    {
+      "id": 3,
+      "title": "This a coffee from Dawaro, South West Ethiopia",
+      "description": "What does it feel like to witness climate change playing out in real-time? #notcool. Sound the alarm with our Women's Climate Change T-shirt, printed on organic cotton in our Carbon Neutral factory. Plus, when it's worn out you can send it back to us to be remade into something new. That's what real sustainability means to us.",
+      "image": "src/assets/dawaro.jpg",
+      "amount": "200",
+      "rating": "4.0"
+    },
+    {
+      "id": 4,
+      "title": "This a coffee from Kaffa, South West Ethiopia",
+      "description": "What does it feel like to witness climate change playing out in real-time? #notcool. Sound the alarm with our Women's Climate Change T-shirt, printed on organic cotton in our Carbon Neutral factory. Plus, when it's worn out you can send it back to us to be remade into something new. That's what real sustainability means to us.",
+      "image": "src/assets/kaffa.jpg",
+      "amount": "200",
+      "rating": "4.0"
+    },
+    {
+      "id": 5,
+      "title": "This a coffee from Wollega, West Ethiopia",
+      "description": "What does it feel like to witness climate change playing out in real-time? #notcool. Sound the alarm with our Women's Climate Change T-shirt, printed on organic cotton in our Carbon Neutral factory. Plus, when it's worn out you can send it back to us to be remade into something new. That's what real sustainability means to us.",
+      "image": "src/assets/wollega.jpg",
+      "amount": "200",
+      "rating": "4.0"
+    },
+    {
+      "id": 6,
+      "title": "This a coffee from Gambella, West Ethiopia",
+      "description": "What does it feel like to witness climate change playing out in real-time? #notcool. Sound the alarm with our Women's Climate Change T-shirt, printed on organic cotton in our Carbon Neutral factory. Plus, when it's worn out you can send it back to us to be remade into something new. That's what real sustainability means to us.",
+      "image": "src/assets/gambella.jpg",
+      "amount": "200",
+      "rating": "4.0"
+    },
+    {
+      "id": 7,
+      "title": "This a coffee from Gedeo, South Ethiopia",
+      "description": "What does it feel like to witness climate change playing out in real-time? #notcool. Sound the alarm with our Women's Climate Change T-shirt, printed on organic cotton in our Carbon Neutral factory. Plus, when it's worn out you can send it back to us to be remade into something new. That's what real sustainability means to us.",
+      "image": "src/assets/gedeo.jpg",
+      "amount": "200",
+      "rating": "4.0"
+    },
+    {
+      "id": 8,
+      "title": "This a coffee from Harar, East Ethiopia",
+      "description": "What does it feel like to witness climate change playing out in real-time? #notcool. Sound the alarm with our Women's Climate Change T-shirt, printed on organic cotton in our Carbon Neutral factory. Plus, when it's worn out you can send it back to us to be remade into something new. That's what real sustainability means to us.",
+      "image": "src/assets/wollega.jpg",
+      "amount": "200",
+      "rating": "4.0"
+    }
+  ],
+  "orders": [
+    {
+      "basket": [
+        {
+          "id": 4,
+          "title": "Jockey - Men's Regular Fit Round Neck Half Sleeved T-Shirt",
+          "image": "https://i.pinimg.com/564x/26/ee/90/26ee903549b8b69635152f5db58264b2.jpg",
+          "price": "350",
+          "rating": "4.0"
+        },
+        {
+          "id": 3,
+          "title": "U.S. POLO ASSN - Men's Solid Regular Fit Cotton Polo",
+          "image": "https://i.pinimg.com/564x/55/82/bc/5582bc23ad7619f10f09d10141e7a6b9.jpg",
+          "price": "400",
+          "rating": "4.0"
+        }
+      ],
+      "id": 1
+    },
+    {
+      "basket": [
+        {
+          "id": 1,
+          "title": "EYEBOGLER Regular Fit Men's Cotton T-Shirt",
+          "image": "https://i.pinimg.com/originals/25/0d/a3/250da32c889b624849bf828ae2ece420.jpg",
+          "price": "200",
+          "rating": "4.0"
+        },
+        {
+          "id": 2,
+          "title": "RodZen - Men's Cotton Half Sleeve Regular Fit Striped T-Shirt",
+          "image": "https://i.pinimg.com/564x/b9/83/a7/b983a7e4e9a4a05ee8ae8333f1c7b2d8.jpg",
+          "price": "300",
+          "rating": "4.0"
+        },
+        {
+          "id": 3,
+          "title": "U.S. POLO ASSN - Men's Solid Regular Fit Cotton Polo",
+          "image": "https://i.pinimg.com/564x/55/82/bc/5582bc23ad7619f10f09d10141e7a6b9.jpg",
+          "price": "400",
+          "rating": "4.0"
+        }
+      ],
+      "id": 2
+    },
+    {
+      "basket": [],
+      "id": 3
+    },
+    {
+      "basket": [
+        {
+          "id": 2,
+          "title": "RodZen - Men's Cotton Half Sleeve Regular Fit Striped T-Shirt",
+          "image": "https://i.pinimg.com/564x/b9/83/a7/b983a7e4e9a4a05ee8ae8333f1c7b2d8.jpg",
+          "price": "300",
+          "rating": "4.0"
+        },
+        {
+          "id": 2,
+          "title": "RodZen - Men's Cotton Half Sleeve Regular Fit Striped T-Shirt",
+          "image": "https://i.pinimg.com/564x/b9/83/a7/b983a7e4e9a4a05ee8ae8333f1c7b2d8.jpg",
+          "price": "300",
+          "rating": "4.0"
+        },
+        {
+          "id": 2,
+          "title": "RodZen - Men's Cotton Half Sleeve Regular Fit Striped T-Shirt",
+          "image": "https://i.pinimg.com/564x/b9/83/a7/b983a7e4e9a4a05ee8ae8333f1c7b2d8.jpg",
+          "price": "300",
+          "rating": "4.0"
+        }
+      ],
+      "id": 4
+    },
+    {
+      "basket": [
+        {
+          "id": 1,
+          "title": "EYEBOGLER Regular Fit Men's Cotton T-Shirt",
+          "image": "https://i.pinimg.com/originals/25/0d/a3/250da32c889b624849bf828ae2ece420.jpg",
+          "price": "200",
+          "rating": "4.0"
+        }
+      ],
+      "id": 5
+    },
+    {
+      "basket": [
+        {
+          "id": 1,
+          "title": "EYEBOGLER Regular Fit Men's Cotton T-Shirt",
+          "image": "https://i.pinimg.com/originals/25/0d/a3/250da32c889b624849bf828ae2ece420.jpg",
+          "price": "200",
+          "rating": "4.0"
+        }
+      ],
+      "id": 6
+    }
+  ],
+  "favourites": [
+    {
+      "id": 1,
+      "title": "EYEBOGLER Regular Fit Men's Cotton T-Shirt",
+      "image": "https://i.pinimg.com/originals/25/0d/a3/250da32c889b624849bf828ae2ece420.jpg",
+      "price": "200",
+      "rating": "4.0"
+    },
+    {
+      "id": 12,
+      "title": "fanideaz - Mens Cotton Half Sleeve Striped Polo T Shirt with Collar",
+      "image": "https://i.pinimg.com/564x/7f/c0/84/7fc084dbec9b6c0ce19ab73b25bcba7f.jpg",
+      "price": "100",
+      "rating": "4.0"
+    },
+    {
+      "id": 2,
+      "title": "RodZen - Men's Cotton Half Sleeve Regular Fit Striped T-Shirt",
+      "image": "https://i.pinimg.com/564x/b9/83/a7/b983a7e4e9a4a05ee8ae8333f1c7b2d8.jpg",
+      "price": "300",
+      "rating": "4.0"
+    },
+    {
+      "id": 7,
+      "title": "This a coffee from Gedeo, South Ethiopia",
+      "image": "src/assets/gedeo.jpg",
+      "price": "200",
+      "rating": "4.0"
+    }
+  ]
+}
