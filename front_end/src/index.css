@@ -7,3 +7,24 @@
     background: transparent;  /* Optional: just make scrollbar invisible */
   }
   
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination__link {
+    background-color: #B86919;
+    color: white;
+    padding: 8px 12px;
+    margin: 0 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .pagination__link--active {
+    background-color: #333;
+  }
+  

@@ -14,4 +14,9 @@ class CoffeeBrandOwner extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
 }

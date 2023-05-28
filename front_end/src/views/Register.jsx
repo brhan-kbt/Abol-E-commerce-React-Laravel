@@ -13,6 +13,7 @@ const Register = () => {
     role_id: 1,
     fullName: '',
     coffeeBrandName: '',
+    subscription_id:'0',
     username: '',
     licenseNumber: '',
     address: '',

@@ -30,6 +30,7 @@ class SignupRequest extends FormRequest
             'role_id' => '',
             'address' => '',
             'licenseNumber' => '',
+            'subscription_id' => '',
             'username' => 'required|unique:users,username',
             'password' => [
                 'required',

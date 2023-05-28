@@ -6,7 +6,7 @@ import CoffeeForm from './CoffeeForm';
 import axiosClient from '../../axios';
 import Header from '../../Layout/Header';
 
-const Coffee = () => {
+const Advertisement = () => {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -159,7 +159,7 @@ const Coffee = () => {
     <>
     <Box m="1.5rem 2.5rem ">
         <div className='flex justify-between'>
-        <Header title="Product/Coffee" subtitle="List of products" />
+        <Header title="Advertisement" subtitle="List of advertisement" />
         <Button sx={{ backgroundColor: "green",height:'40px', color:'white','&:hover': {
             backgroundColor: 'darkgreen',
             color: 'lightGrey',
@@ -209,11 +209,13 @@ const Coffee = () => {
             <CircularProgress />
           </Box>
         ) : (
+          <Box sx={{ width: '100%', overflowX: 'auto' }}>
             <DataGrid
               getRowId={(row) => row.id}
               rows={users}
               columns={columns}
             />
+          </Box>
         )}
          <CoffeeForm
           role={selectedProduct}
@@ -227,4 +229,4 @@ const Coffee = () => {
   )
 }
 
-export default Coffee
+export default Advertisement

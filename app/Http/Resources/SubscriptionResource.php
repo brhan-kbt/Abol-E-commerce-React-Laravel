@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CoffeeBrandOwnerResource extends JsonResource
+class SubscriptionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,9 @@ class CoffeeBrandOwnerResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'coffeeBrandName' => $this->coffeeBrandName,
-            'address' => $this->address,
-            'licenseNumber' => $this->licenseNumber,
-            'subscription' => new SubscriptionResource($this->subscription), // Assuming 'subscription' is the name of the relationship
+            'subscriptionName' => $this->subscriptionName,
+            'subscriptionPrice' => $this->subscriptionPrice,
+            'features' => $this->features,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

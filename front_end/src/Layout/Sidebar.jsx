@@ -95,7 +95,7 @@ const navItems = [
 
       {
         id:100,
-        text: "Review & Rating",
+        text: "Review&Rating",
         icon: <ReviewsOutlined />,
       },
    
@@ -103,11 +103,6 @@ const navItems = [
       id:7,
       text: "Order Module",
       icon: null,
-    },
-    {
-      id:8,
-      text: "Overview",
-      icon: <PointOfSaleOutlined />,
     },
     {
       id:9,

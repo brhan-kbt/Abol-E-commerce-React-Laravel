@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Customer;
 use App\Models\CoffeeBrandOwner;
 use Illuminate\Http\Request;
+use App\Models\Subscription;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -49,10 +50,20 @@ class AuthController extends Controller
                 'address' => $data['address'],
                 'licenseNumber' => $data['licenseNumber'],
                 // Add other fields specific to the CoffeeBrandOwner model
+                 // Check if subscription_id is provided
             ]);
     
             // Associate the CoffeeBrandOwner with the UserAccount
             $user->coffeeBrandOwner()->associate($coffeeBrandOwner);
+
+            if ($data['subscription_id']) {
+                $subscription = Subscription::find($data['subscription_id']);
+                if ($subscription) {
+                    $coffeeBrandOwner->subscription()->associate($subscription);
+                    $coffeeBrandOwner->save();
+                }
+            }
+            
         }
     
         // Find the Role by ID

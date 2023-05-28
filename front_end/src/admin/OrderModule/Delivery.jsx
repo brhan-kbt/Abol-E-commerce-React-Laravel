@@ -2,11 +2,11 @@ import { Add, Delete, Edit } from '@mui/icons-material';
 import { Box, Button, CircularProgress, IconButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import CoffeeForm from './CoffeeForm';
 import axiosClient from '../../axios';
 import Header from '../../Layout/Header';
+import CoffeeForm from '../ProductModule/CoffeeForm';
 
-const Coffee = () => {
+const Delivery = () => {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -159,11 +159,11 @@ const Coffee = () => {
     <>
     <Box m="1.5rem 2.5rem ">
         <div className='flex justify-between'>
-        <Header title="Product/Coffee" subtitle="List of products" />
-        <Button sx={{ backgroundColor: "green",height:'40px', color:'white','&:hover': {
+        <Header title="Order" subtitle="List of orders" />
+        {/* <Button sx={{ backgroundColor: "green",height:'40px', color:'white','&:hover': {
             backgroundColor: 'darkgreen',
             color: 'lightGrey',
-            },}} className='flex gap-2' onClick={handleButtonClick}><Add/> Add Product</Button>
+            },}} className='flex gap-2' onClick={handleButtonClick}><Add/> Add Product</Button> */}
         </div>
    </Box>
    <Box
@@ -209,11 +209,13 @@ const Coffee = () => {
             <CircularProgress />
           </Box>
         ) : (
+          <Box sx={{ width: '100%', overflowX: 'auto' }}>
             <DataGrid
               getRowId={(row) => row.id}
               rows={users}
               columns={columns}
             />
+          </Box>
         )}
          <CoffeeForm
           role={selectedProduct}
@@ -227,4 +229,4 @@ const Coffee = () => {
   )
 }
 
-export default Coffee
+export default Delivery

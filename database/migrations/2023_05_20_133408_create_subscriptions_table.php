@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('coffee_brand_owners', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->string('coffeeBrandName')->nullable();
-            $table->string('licenseNumber')->nullable();
-            $table->string('address')->nullable();
-            $table->foreignId('subscription_id')->nullable()->constrained('subscriptions');
+            $table->string('subscriptionName');
+            $table->decimal('subscriptionPrice', 8, 2);
+            $table->text('features');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('coffee_brand_owners');
+        Schema::dropIfExists('subscriptions');
     }
 };

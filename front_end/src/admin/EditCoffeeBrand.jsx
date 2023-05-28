@@ -10,6 +10,7 @@ export default function EditCoffeeBrand({ handleEdit, handleAdd, openDialog, onC
     id: user?.id || '',
     username: user?.username || '',
     coffeeBrandName: user?.coffeeBrandOwner?.coffeeBrandName || '',
+    subscription_id:2,
     address: user?.coffeeBrandOwner?.address || '',
     licenseNumber: user?.coffeeBrandOwner?.licenseNumber || '',
     role_id: user?.role?.id || '',
@@ -36,6 +37,7 @@ export default function EditCoffeeBrand({ handleEdit, handleAdd, openDialog, onC
         address: user.coffeeBrandOwner.address || '',
         licenseNumber: user.coffeeBrandOwner.licenseNumber || '',
         role_id: user.role.id || '',
+        subscription_id:2,
       });
     }
   }, [openDialog, user]);

@@ -13,14 +13,14 @@ return new class extends Migration
     {
        // In the migration file
        Schema::create('users', function (Blueprint $table) {
-        $table->increments('id');
-        $table->string('username');
-        $table->string('password');
-        $table->rememberToken();
-        $table->foreignId('role_id')->nullable()->constrained('roles');
-        $table->foreignId('customer_id')->nullable()->constrained('customers');
-        $table->foreignId('coffee_brand_owner_id')->nullable()->constrained('coffee_brand_owners');
-        $table->timestamps();
+            $table->increments('id');
+            $table->string('username');
+            $table->string('password');
+            $table->rememberToken();
+            $table->foreignId('role_id')->nullable()->constrained('roles');
+            $table->foreignId('customer_id')->nullable()->constrained('customers');
+            $table->foreignId('coffee_brand_owner_id')->nullable()->constrained('coffee_brand_owners');
+            $table->timestamps();
         });
 
     }
