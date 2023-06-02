@@ -14,13 +14,14 @@ const Layout = () => {
   const [isSidebarOpen,setIsSidebarOpen]=useState(true);
 
 
-  const {userToken}=useStateContext();
-  if (!userToken) {
-    return  <Navigate to='/login'/>
-  }
-//   const userId=useSelector((state)=>state.global.userId);
-//   const {data}=useGetUserQuery(userId);
-//   console.log('data',data);
+  // const {userToken}=useStateContext();
+  const user=localStorage.getItem('abol_user');
+
+  // if (user.normalize.name !== 'admin') {
+  //   return  <Navigate to='/login'/>
+  // }
+
+
   return (
     <Box display={isNonMobile?"flex":"block"} width='100%' height='100%' sx={{backgroundColor:'white'}}>
       

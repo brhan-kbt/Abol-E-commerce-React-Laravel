@@ -20,6 +20,8 @@ class ProductRequest extends FormRequest
             'productName' => 'required|string|max:255',
             'productType' => 'required|string|max:255',
             'productWeight' => 'required|string|max:255',
+            'price' => 'required',
+            'status' => '',
             'brand' => 'required|string|max:255',
         ];
     }

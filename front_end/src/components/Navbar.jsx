@@ -1,15 +1,49 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Add, Dashboard, Logout, LogoutOutlined, Person, Settings, ShoppingCart } from '@mui/icons-material';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/tlogo1.png';
+import { useStateContext } from '../contexts/ContextProvider';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [user, setUser] = useState(false);
 
-  const handleBar = () => {
-    setIsOpen(!isOpen);
-    console.log('clicked');
+  const handleToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const handleMenuToggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+ 
+  const { currentUser, cartItems } = useStateContext(); // Get currentUser and cartItems from context
+  // const cartTotal = cartItems.reduce((total, item) => total + item.quantity, 0); 
+  // Calculate the total quantity of items in the cart
+  const cartTotal = cartItems.length; // Calculate the total quantity of items in the cart
+ 
+ console.log(cartTotal);
+  useEffect(() => {
+    if (Object.keys(currentUser).length !== 0) {
+      setUser(true);
+    } else {
+      setUser(false);
+      console.log('False');
+    }
+  }, [currentUser]);
+  
+  const navigate=useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('abol_user');
+    localStorage.removeItem('abol_token');
+    navigate('/login');
+    window.location.reload(); // Force page reload
+  };
+
+
 
   return (
     <>
@@ -19,7 +53,7 @@ const Navbar = () => {
             <img className="h-20" src={logo} alt="" />
           </Link>
           <div className="lg:hidden">
-            <button className="navbar-burger flex items-center text-blue-600 p-3" onClick={handleBar}>
+            <button className="navbar-burger flex items-center text-blue-600 p-3" onClick={handleMenuToggle}>
               {!isOpen && (
                 <svg className="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                   <title>Mobile menu</title>
@@ -81,24 +115,156 @@ const Navbar = () => {
                 </Link>
             </li>
             </ul>
-          <Link
-            className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-[#B86919] hover:bg-gray-500 text-sm text-gray-100 font-bold
-            rounded-md transition duration-200"
-            to="/login"
-          >
-            Sign In
-          </Link>
-          <Link className="hidden lg:inline-block py-2 px-6 bg-[#B86919] hover:bg-gray-500 text-sm text-gray-100 font-bold rounded-md transition duration-200" to="/register">
-            Sign up
-          </Link>
+            
+            {user ? (
+              <>
+              <div className='flex justify-center gap-8 items-center'>
+              <Link to="/cart" className="relative">
+                <ShoppingCart sx={{width:'40px'}} className="text-[#B5681B]  rounded-full" />
+                {cartTotal > 0 && (
+                  <span className="absolute top-0 right-0 -mt-1 -mr-1 px-2 py-1   text-white text-xs font-semibold rounded-full">
+                    {cartTotal}
+                  </span>
+                )}
+              </Link>
+                 <div className="hidden lg:inline-block relative" data-te-dropdown-ref>
+
+                <button
+                  className="hidden-arrow flex gap-3 items-center whitespace-nowrap transition duration-150 ease-in-out motion-reduce:transition-none"
+                  id="dropdownMenuButton2"
+                  role="button"
+                  data-te-dropdown-toggle-ref
+                  aria-expanded={isOpen ? 'true' : 'false'}
+                  onClick={handleToggle}
+                >
+                  <Person sx={{width:'40px',height:'40px'}} className='text-[#B5681B] border  border-[#B5681B] rounded-full'/>
+                  <div>
+                  <p className='text-white font-bold'>{currentUser.username}</p>
+                  <small className='text-[#B5681B] flex items-start font-bold'>{currentUser.role.name}</small>
+                  </div>
+                </button>
+                {isDropdownOpen && (
+                  <ul
+                    className="absolute left-auto right-0 z-[1000] float-left  m-0 mt-3 min-w-max list-none overflow-hidden rounded-lg border-none bg-[#111827] bg-clip-padding text-left text-base shadow-lg "
+                    aria-labelledby="dropdownMenuButton2"
+                    data-te-dropdown-menu-ref
+                  >
+                {currentUser && currentUser.role && currentUser.role.name === 'coffeebrand' && (
+                      <>
+                      <li>
+                        <Link
+                          className="block w-full  whitespace-nowrap bg-transparent px-10 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                          to="/coffee-brand/dashboard"
+                          data-te-dropdown-item-ref
+                        >
+                          <Dashboard />
+                          My Dashboard
+                        </Link>
+                      </li>
+                      <li></li>
+                        <li>
+                          <Link
+                            className="block w-full whitespace-nowrap bg-transparent px-10 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                            to="/coffee-brand/post"
+                            data-te-dropdown-item-ref
+                          >
+                            <Add />
+                            My Products
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="block w-full whitespace-nowrap bg-transparent px-10 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                            to="/coffee-brand/advert"
+                            data-te-dropdown-item-ref
+                          >
+                            <Add />
+                            My Adverts
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link
+                            className="block w-full  whitespace-nowrap bg-transparent px-10 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                            to="/profile"
+                            data-te-dropdown-item-ref
+                          >
+                            <Settings />
+                            Setting
+                          </Link>
+                        </li>
+                      </>
+                    )}
+
+                    {currentUser && currentUser.role && currentUser.role.name === 'customer' && (
+                      <>
+                      <li>
+                        <Link
+                          className="block w-full  whitespace-nowrap bg-transparent px-10 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                          to="/customer/dashboard"
+                          data-te-dropdown-item-ref
+                        >
+                          <Dashboard />
+                          My Dashboard
+                        </Link>
+                      </li>
+                      <li>
+                      <Link
+                        className="block w-full  whitespace-nowrap bg-transparent px-10 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                        to="/profile"
+                        data-te-dropdown-item-ref
+                      >
+                        <Settings />
+                        Setting
+                      </Link>
+                    </li>
+                    </>
+                    )}
+
+    
+                    <li>
+                      <a
+                        className="block w-full whitespace-nowrap bg-transparent px-11 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                        data-te-dropdown-item-ref
+                        onClick={handleLogout}
+                      >
+                        <Logout/>
+                        Logout
+                      </a>
+                    </li>
+                  </ul>
+                )}
+                </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <Link
+                  className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-[#B86919] hover:bg-gray-500 text-sm text-gray-100 font-bold rounded-md transition duration-200"
+                  to="/login"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  className="hidden lg:inline-block py-2 px-6 bg-[#B86919] hover:bg-gray-500 text-sm text-gray-100 font-bold rounded-md transition duration-200"
+                  to="/register"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+  
+    
         </nav>
         {isOpen && (
             <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-black z-100000 border-r overflow-y-auto" style={{zIndex:200000}}>
+            
+            
             <div className="flex items-center mb-8">
-                <a className="mr-auto text-3xl font-bold leading-none" href="#">
-                <img className="h-20" src={logo} alt="" />
-                </a>
-                <button className="navbar-close" onClick={handleBar}>
+                <Link className="mr-auto text-3xl font-bold leading-none" to="/">
+                  <img className="h-20" src={logo} alt="" />
+                </Link>
+                <button className="navbar-close" >
                 <svg className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>

@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import React, { useEffect } from 'react'
 import axiosClient from '../axios';
+import { useStateContext } from '../contexts/ContextProvider';
 import Header from '../Layout/Header'
 
 const Dashboard = () => {
@@ -13,6 +14,11 @@ const Dashboard = () => {
   //       console.error(error);
   //     });
   // }, []);
+
+  const {currentUser,setCurrentUser}=useStateContext()
+
+
+  console.log('USER',currentUser);
   return (
     <Box m="1.5rem 2.5rem">
         <Header title="Dashboard" subtitle="Overall Report" />

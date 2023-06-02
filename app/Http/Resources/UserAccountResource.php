@@ -17,11 +17,12 @@ class UserAccountResource extends JsonResource
         return [
             'id' => $this->id,
             'username' => $this->username,
-            'role' => new RoleResource($this->whenLoaded('role')),
-            'customer' => new CustomerResource($this->whenLoaded('customer')),
-            'coffeeBrandOwner' => new CoffeeBrandOwnerResource($this->whenLoaded('coffeeBrandOwner')),
+            'role' => new RoleResource($this->role),
+            'customer' => new CustomerResource($this->customer),
+            'coffee_brand_owner' => new CoffeeBrandOwnerResource($this->coffeeBrandOwner),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'products' => ProductResource::collection($this->products),
         ];
     }
 }

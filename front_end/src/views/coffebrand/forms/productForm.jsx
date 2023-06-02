@@ -8,25 +8,25 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { MenuItem } from '@mui/material';
+import { useStateContext } from '../../../contexts/ContextProvider';
 
-export default function CoffeeForm({
+export default function ProductForm({
   handleEdit,
   handleAdd,
   openDialog,
   onClose,
-  role,
+  product,
 }) {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState('');
+  const {currentUser}=useStateContext();
   const [formData, setFormData] = useState({
-    productName: role?.productName || '',
-    productType: role?.productType || '',
-    productWeight: role?.productWeight || '',
-    brand: role?.brand || '',
+    productName: product?.productName || '',
+    productType: product?.productType || '',
+    productWeight: product?.productWeight || '',
+    brand: product?.brand || '',
+    user_id:currentUser.id,
     photo: null,
-    status: role?.status || 0, // Add status field with default value 0
-
   });
 
   const handleClickOpen = () => {
@@ -40,27 +40,28 @@ export default function CoffeeForm({
 
   useEffect(() => {
     setOpen(openDialog);
-    if (role) {
+    if (product) {
       setFormData({
-        productName: role.productName || '',
-        productType: role.productType || '',
-        productWeight: role.productWeight || '',
-        brand: role.brand || '',
-        price: role.price || '',
+        productName: product.productName || '',
+        productType: product.productType || '',
+        productWeight: product.productWeight || '',
+        brand: product.brand || '',
+        price: product.price || '',
+        user_id:product.user_id,
+        status:0,
         photo: null,
       });
-      setId(role.id);
+      setId(product.id);
     }
-  }, [role]);
+  }, [product]);
 
   const handleSubscribe = () => {
     const updatedFormData = id ? { ...formData, id } : formData;
 
-    if (role && role.id) {
+    if (product && product.id) {
+      
       handleEdit(updatedFormData);
-      console.log(updatedFormData);
     } else {
-      console.log(formData);
       const formData = new FormData();
       formData.append('productName', updatedFormData.productName);
       formData.append('productType', updatedFormData.productType);
@@ -68,7 +69,10 @@ export default function CoffeeForm({
       formData.append('brand', updatedFormData.brand);
       formData.append('price', updatedFormData.price);
       formData.append('photo', updatedFormData.photo);
-      formData.append('status', updatedFormData.status); // Append the status field to the FormData
+      formData.append('user_id', currentUser.id);
+      formData.append('status', 0);
+
+      console.log(currentUser.id);
 
       handleAdd(formData);
     }
@@ -76,15 +80,9 @@ export default function CoffeeForm({
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-  
-    let updatedValue = value;
-    if (name === 'status') {
-      updatedValue = parseInt(value); // Convert the value to an integer
-    }
-    console.log(updatedValue);
     setFormData((prevState) => ({
       ...prevState,
-      [name]: updatedValue,
+      [name]: value,
     }));
   };
 
@@ -105,21 +103,6 @@ export default function CoffeeForm({
           </DialogTitle>
           <DialogContent sx={{ padding: '16px' }}>
             <Box sx={{ maxHeight: '300px', overflowY: 'auto' }}>
-            <TextField
-            id="status"
-            label="Status"
-            select
-            name="status"
-            value={formData.status}
-            onChange={handleFormChange}
-            autoComplete="off"
-            fullWidth
-            required
-            sx={{ marginBottom: '16px' }}
-          >
-            <MenuItem value={0}>Pending</MenuItem>
-            <MenuItem value={1}>Activate</MenuItem>
-          </TextField>
               <TextField
                 id="productName"
                 label="Product Name"
@@ -132,24 +115,26 @@ export default function CoffeeForm({
                 required
                 sx={{ marginTop: '16px', marginBottom: '16px' }}
               />
-              <TextField
-                id="productType"
-                label="Coffee Brand Name"
-                type="text"
-                name="productType"
-                value={formData.productType}
-                onChange={handleFormChange}
-                autoComplete="off"
-                fullWidth
-                required
-                sx={{ marginBottom: '16px' }}
-              />
+             
               <TextField
                 id="productWeight"
                 label="Product Weight"
                 type="text"
                 name="productWeight"
                 value={formData.productWeight}
+                onChange={handleFormChange}
+                autoComplete="off"
+                fullWidth
+                required
+                sx={{ marginBottom: '16px' }}
+              />
+
+              <TextField
+                id="price"
+                label="Product Type"
+                type="text"
+                name="productType"
+                value={formData.productType}
                 onChange={handleFormChange}
                 autoComplete="off"
                 fullWidth

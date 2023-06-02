@@ -5,14 +5,17 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import axiosClient from '../../axios';
 import Header from '../../Layout/Header';
 import CoffeeForm from '../ProductModule/CoffeeForm';
+import { useNavigate } from 'react-router-dom';
 
 const Order = () => {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [orders, setOrders] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
 
+    const navigate=useNavigate();
     const handleProductFormSubmit = (product) => {
         if (product.id) {
           // product has an ID, perform edit operation
@@ -59,11 +62,10 @@ const Order = () => {
       
 
     useEffect(() => {
-        axiosClient.get('/products')
+        axiosClient.get('/orders')
           .then(response => {
-            const usersData= response.data; 
-            console.log('Products',usersData);
-            setUsers(usersData);
+            console.log('Orders:',response.data.data);
+            setOrders(response.data.data);
             setIsLoading(false);
           })
           .catch(error => {
@@ -94,41 +96,17 @@ const Order = () => {
         flex: 0.1,
     },
      {
-     field: "productName",
-     headerName: "Product Name",
+     field: "address",
+     headerName: "Address",
      flex: 0.5,
      },
+     
      {
-      field: "photo",
-      headerName: "Product Photo",
-      flex: 0.5,
-      renderCell: (params) => {
-        return (
-          <img
-            
-            src={params.value}
-            alt="Product"
-            style={{ width: 50, height: 50,borderRadius:50 }}
-          />
-        );
-      },
-    },
-     {
-        field: "productType",
-        headerName: "Product Type",
+        field: "status",
+        headerName: "Order Status",
         flex: 0.5,
     },
-    {
-        field: "productWeight",
-        headerName: "Product Weight",
-        flex: 0.5,
-    }, 
-        
-    {
-     field: "brand",
-     headerName: "Product Brand",
-     flex: 0.5,
-     },
+  
      
     {
         field: "actions",
@@ -154,6 +132,13 @@ const Order = () => {
         setOpenDialog(true);
 
       };
+
+        const handleRowClick = (params) => {
+          const selectedRow = params.row;
+          console.log(selectedRow);
+          navigate(`/order/${selectedRow.id}`, { state: { selectedRow } }); // Navigate to the detail route and pass the selected row data as state
+        
+        };
     
   return (
     <>
@@ -212,8 +197,9 @@ const Order = () => {
           <Box sx={{ width: '100%', overflowX: 'auto' }}>
             <DataGrid
               getRowId={(row) => row.id}
-              rows={users}
+              rows={orders}
               columns={columns}
+              onRowClick={handleRowClick}
             />
           </Box>
         )}

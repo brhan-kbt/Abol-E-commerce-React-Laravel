@@ -44,10 +44,19 @@ export default function Login() {
       .post("/login", formData)
       .then((response) => {
         // Handle successful login
-        console.log(response.data);
+        console.log(response.data.user.role.name);
         setCurrentUser(response.data.user)
         setUserToken(response.data.token)
-        router('/dashboard')
+        if(response.data.user.role.name==='admin'){
+          router('/dashboard')
+        }
+        if(response.data.user.role.name==='coffeebrand'){
+          router('/coffee-brand/dashboard')
+        }
+
+        if(response.data.user.role.name==='customer'){
+          router('/customer/dashboard')
+        }
       })
       .catch((error) => {
         // Handle login error

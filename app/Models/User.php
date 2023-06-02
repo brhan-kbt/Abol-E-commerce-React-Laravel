@@ -54,4 +54,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(CoffeeBrandOwner::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(RatingReview::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

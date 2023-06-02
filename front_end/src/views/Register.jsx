@@ -52,7 +52,17 @@ const Register = () => {
          // Handle the response from the backend
          setCurrentUser(response.data.user)
          setUserToken(response.data.token)
-         router('/dashboard')
+         console.log('Role:',response.data.user.role.name);
+          if(response.data.user.role.name==='admin'){
+            router('/dashboard')
+          }
+          if(response.data.user.role.name==='coffeebrand'){
+            router('/coffee-brand/dashboard')
+          }
+
+          if(response.data.user.role.name==='customer'){
+            router('/customer/dashboard')
+          }
 
        })
        .catch(error => {

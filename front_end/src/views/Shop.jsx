@@ -9,6 +9,9 @@ import axiosClient from '../axios'
 import ReactPaginate from 'react-paginate';
 
 import loading from '../assets/loading.gif'
+import { Link, useNavigate } from 'react-router-dom';
+import { useStateContext } from '../contexts/ContextProvider';
+import { Rating } from '@mui/material';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -84,6 +87,10 @@ const Shop = () => {
         setCurrentPage(selected);
       };
 
+      const navigate = useNavigate();
+      const setSelectedProduct = (prod) => {
+        navigate(`/shop/${prod.product.id}`, { state: prod });
+      };
  
   return (
     <>
@@ -309,17 +316,18 @@ const Shop = () => {
                     <div className='grid-cols-1 sm:grid-cols-2 gap-3 md:grid-cols-4 grid lg:grid-cols-4'>
                     {currentProducts.map((product) => (
                     <article class="rounded-xl bg-white p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 ">
-                    <a href="#">
+                    <a href='#' onClick={() => setSelectedProduct(product)}>
                         <div class="relative flex items-end overflow-hidden rounded-xl">
-                        <img src={product.photo} alt="Hotel Photo" />
+                        <img src={product.product.photo} alt="Hotel Photo" />
                         </div>
 
                         <div class="mt-1 p-2">
-                        <h2 class="text-slate-700">{product.productName}</h2>
+                        <h2 class="text-slate-700">{product.product.productName}</h2>
                         <p class="mt-1 text-sm text-slate-400">{product.brand}</p>
+                            <Rating value={product.average_rating}  readOnly/>
 
                         <div class="mt-3 flex items-end justify-between">
-                            <p class="text-lg font-bold text-[#B86919]">$850</p>
+                            <p class="text-lg font-bold text-[#B86919]">{product.product.price}</p>
 
                             <div class="flex items-center space-x-1.5 rounded-lg bg-[#B86919] px-4 py-1.5 text-white duration-100 hover:bg-gray-700">
 

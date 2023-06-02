@@ -8,9 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { MenuItem } from '@mui/material';
 
-export default function CoffeeForm({
+export default function AdvertForm({
   handleEdit,
   handleAdd,
   openDialog,
@@ -25,8 +24,6 @@ export default function CoffeeForm({
     productWeight: role?.productWeight || '',
     brand: role?.brand || '',
     photo: null,
-    status: role?.status || 0, // Add status field with default value 0
-
   });
 
   const handleClickOpen = () => {
@@ -57,10 +54,9 @@ export default function CoffeeForm({
     const updatedFormData = id ? { ...formData, id } : formData;
 
     if (role && role.id) {
+      
       handleEdit(updatedFormData);
-      console.log(updatedFormData);
     } else {
-      console.log(formData);
       const formData = new FormData();
       formData.append('productName', updatedFormData.productName);
       formData.append('productType', updatedFormData.productType);
@@ -68,7 +64,6 @@ export default function CoffeeForm({
       formData.append('brand', updatedFormData.brand);
       formData.append('price', updatedFormData.price);
       formData.append('photo', updatedFormData.photo);
-      formData.append('status', updatedFormData.status); // Append the status field to the FormData
 
       handleAdd(formData);
     }
@@ -76,15 +71,9 @@ export default function CoffeeForm({
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-  
-    let updatedValue = value;
-    if (name === 'status') {
-      updatedValue = parseInt(value); // Convert the value to an integer
-    }
-    console.log(updatedValue);
     setFormData((prevState) => ({
       ...prevState,
-      [name]: updatedValue,
+      [name]: value,
     }));
   };
 
@@ -105,21 +94,6 @@ export default function CoffeeForm({
           </DialogTitle>
           <DialogContent sx={{ padding: '16px' }}>
             <Box sx={{ maxHeight: '300px', overflowY: 'auto' }}>
-            <TextField
-            id="status"
-            label="Status"
-            select
-            name="status"
-            value={formData.status}
-            onChange={handleFormChange}
-            autoComplete="off"
-            fullWidth
-            required
-            sx={{ marginBottom: '16px' }}
-          >
-            <MenuItem value={0}>Pending</MenuItem>
-            <MenuItem value={1}>Activate</MenuItem>
-          </TextField>
               <TextField
                 id="productName"
                 label="Product Name"

@@ -1,14 +1,18 @@
 import { Add, Delete, Edit } from '@mui/icons-material';
-import { Box, Button, CircularProgress, IconButton, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, IconButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import CoffeeForm from './CoffeeForm';
 import axiosClient from '../../axios';
 import Header from '../../Layout/Header';
+import ProductForm from './forms/productForm';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import { useStateContext } from '../../contexts/ContextProvider';
 
-const Coffee = () => {
+const Product = () => {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const {currentUser}=useStateContext();
 
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
@@ -70,6 +74,18 @@ const Coffee = () => {
             console.error(error);
             setIsLoading(false)
           });
+
+          axiosClient.get(`/products/user/${currentUser.id}`)
+          .then(response => {
+            const usersData= response.data.data; 
+            console.log('ProductsOfUser:',usersData.data);
+            setUsers(usersData);
+            setIsLoading(false);
+          })
+          .catch(error => {
+            console.error(error);
+            setIsLoading(false)
+          });
       }, []); 
       console.log(users);
 
@@ -87,84 +103,67 @@ const Coffee = () => {
         setOpenDialog(false);
       };
 
-      const columns = [
-        {
-          field: "id",
-          headerName: "ID",
-          flex: 0.1,
-          valueGetter: (params) => params.row.product.id,
-        },
-        {
-          field: "productName",
-          headerName: "Product Name",
-          flex: 0.5,
-          valueGetter: (params) => params.row.product.productName,
-        },
-        {
-          field: "photo",
-          headerName: "Product Photo",
-          flex: 0.5,
-          renderCell: (params) => {
-            return (
-              <img
-                src={params.row.product.photo}
-                alt="Product"
-                style={{ width: 50, height: 50, borderRadius: 50 }}
-              />
-            );
-          },
-        },
-        {
-          field: "productType",
-          headerName: "Product Type",
-          flex: 0.5,
-          valueGetter: (params) => params.row.product.productType,
-        },
-        {
-          field: "productWeight",
-          headerName: "Product Weight",
-          flex: 0.5,
-          valueGetter: (params) => params.row.product.productWeight,
-        },
-        {
-          field: "brand",
-          headerName: "Product Brand",
-          flex: 0.5,
-          valueGetter: (params) => params.row.product.brand,
-        },
-        {
-          field: "status",
-          headerName: "Status",
-          flex: 0.3,
-          renderCell: (params) => {
-            const statusValue = params.row.product.status;
-            const statusText = statusValue === 0 ? "Pending" : "Active";
-            const textColor = statusValue === 0 ? "red" : "green";
+    const columns = [
+    {
+        field: "id",
+        headerName: "ID",
+        flex: 0.1,
+    },
+     {
+     field: "productName",
+     headerName: "Product Name",
+     flex: 0.5,
+     },
+     {
+      field: "photo",
+      headerName: "Product Photo",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <img
             
-            return (
-              <Typography sx={{ color: textColor }}>{statusText}</Typography>
-            );
-          },
+            src={params.value}
+            alt="Product"
+            style={{ width: 50, height: 50,borderRadius:50 }}
+          />
+        );
+      },
+    },
+     {
+        field: "productType",
+        headerName: "Product Type",
+        flex: 0.5,
+    },
+    {
+        field: "productWeight",
+        headerName: "Product Weight",
+        flex: 0.5,
+    }, 
+        
+    {
+     field: "brand",
+     headerName: "Product Brand",
+     flex: 0.5,
+     },
+     
+    {
+        field: "actions",
+        headerName: "Actions",
+        flex: 0.3,
+        renderCell: (params) => {
+        return (
+            <Box>
+            <IconButton sx={{ color: "green" }} onClick={() => handleEdit(params.row)}>
+              <Edit />
+            </IconButton>
+            <IconButton sx={{ color: "red" }} onClick={() => deleteRow(params.row.id)}>
+              <Delete />
+            </IconButton>
+            </Box>
+        );
         },
-        {
-          field: "actions",
-          headerName: "Actions",
-          flex: 0.3,
-          renderCell: (params) => {
-            return (
-              <Box>
-                <IconButton sx={{ color: "green" }} onClick={() => handleEdit(params.row.product)}>
-                  <Edit />
-                </IconButton>
-                <IconButton sx={{ color: "red" }} onClick={() => deleteRow(params.row.id)}>
-                  <Delete />
-                </IconButton>
-              </Box>
-            );
-          },
-        },
-      ];
-      
+    },
+    ];
     const handleButtonClick = () => {
         setSelectedProduct({}); // Reset selectedProduct to null
         console.log('clicked');
@@ -174,16 +173,17 @@ const Coffee = () => {
     
   return (
     <>
+    <Navbar/>
     <Box m="1.5rem 2.5rem ">
         <div className='flex justify-between'>
-        <Header title="Product/Coffee" subtitle="List of products" />
+        <Header title="Product" subtitle="List of your products" />
         <Button sx={{ backgroundColor: "green",height:'40px', color:'white','&:hover': {
             backgroundColor: 'darkgreen',
             color: 'lightGrey',
             },}} className='flex gap-2' onClick={handleButtonClick}><Add/> Add Product</Button>
         </div>
-   </Box>
-   <Box
+    </Box>
+    <Box
           padding='40px'
           pt='0px'
           height="75vh"
@@ -232,16 +232,17 @@ const Coffee = () => {
               columns={columns}
             />
         )}
-         <CoffeeForm
-          role={selectedProduct}
+         <ProductForm
+          product={selectedProduct}
           openDialog={openDialog}
           onClose={handleDialogClose}
           handleEdit={handleProductFormSubmit}
           handleAdd={handleProductFormSubmit}
         />
     </Box>
+    <Footer/>
   </>
   )
 }
 
-export default Coffee
+export default Product

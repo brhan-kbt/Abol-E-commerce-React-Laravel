@@ -14,4 +14,6 @@ class Customer extends Model
 {
     return $this->hasOne(User::class);
 }
+
+
 }
