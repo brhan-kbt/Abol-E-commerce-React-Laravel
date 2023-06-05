@@ -9,6 +9,7 @@ import { Box } from '@mui/system';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { MenuItem } from '@mui/material';
+import { useStateContext } from '../../contexts/ContextProvider';
 
 export default function CoffeeForm({
   handleEdit,
@@ -16,15 +17,19 @@ export default function CoffeeForm({
   openDialog,
   onClose,
   role,
+  errors
 }) {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState('');
+  const {currentUser}=useStateContext();
+  
   const [formData, setFormData] = useState({
     productName: role?.productName || '',
     productType: role?.productType || '',
     productWeight: role?.productWeight || '',
     brand: role?.brand || '',
     photo: null,
+    user_id:currentUser.id,
     status: role?.status || 0, // Add status field with default value 0
 
   });
@@ -37,6 +42,7 @@ export default function CoffeeForm({
     setOpen(false);
     onClose();
   };
+  console.log('Errors',errors);
 
   useEffect(() => {
     setOpen(openDialog);
@@ -47,6 +53,8 @@ export default function CoffeeForm({
         productWeight: role.productWeight || '',
         brand: role.brand || '',
         price: role.price || '',
+        user_id:role.user_id,
+        status:role.status,
         photo: null,
       });
       setId(role.id);
@@ -60,15 +68,16 @@ export default function CoffeeForm({
       handleEdit(updatedFormData);
       console.log(updatedFormData);
     } else {
-      console.log(formData);
       const formData = new FormData();
+      console.log(formData);
       formData.append('productName', updatedFormData.productName);
       formData.append('productType', updatedFormData.productType);
       formData.append('productWeight', updatedFormData.productWeight);
       formData.append('brand', updatedFormData.brand);
       formData.append('price', updatedFormData.price);
       formData.append('photo', updatedFormData.photo);
-      formData.append('status', updatedFormData.status); // Append the status field to the FormData
+      formData.append('user_id', currentUser.id);
+      formData.append('status', updatedFormData.status || 0); // Append the status field to the FormData
 
       handleAdd(formData);
     }
@@ -115,7 +124,7 @@ export default function CoffeeForm({
             autoComplete="off"
             fullWidth
             required
-            sx={{ marginBottom: '16px' }}
+            sx={{ marginTop: '16px' }}
           >
             <MenuItem value={0}>Pending</MenuItem>
             <MenuItem value={1}>Activate</MenuItem>
@@ -130,8 +139,13 @@ export default function CoffeeForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginTop: '16px', marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
+               {errors&&errors.productName&&
+                
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                  {errors.productName}
+                  </small>}
               <TextField
                 id="productType"
                 label="Coffee Brand Name"
@@ -142,8 +156,13 @@ export default function CoffeeForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
+               {errors&&errors.productType&&
+                
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                 { errors.productType}
+                  </small>}
               <TextField
                 id="productWeight"
                 label="Product Weight"
@@ -154,8 +173,12 @@ export default function CoffeeForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
+              {errors&&errors.productWeight&&
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                 { errors.productWeight}
+                  </small>}
 
               <TextField
                 id="price"
@@ -167,9 +190,12 @@ export default function CoffeeForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
-
+            {errors&&errors.price&&
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                  {errors.price}
+                  </small>}
               <TextField
                 id="brand"
                 label="Product Brand"
@@ -180,15 +206,21 @@ export default function CoffeeForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
+              {errors&&errors.brand&&
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                 { errors.brand}
+                  </small>}
 
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoChange}
-                sx={{ marginBottom: '16px' }}
-              />
+              <div style={{marginTop:'16px'}}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                  sx={{ marginTop: '16px' }}
+                />
+              </div>
             </Box>
           </DialogContent>
           <DialogActions>

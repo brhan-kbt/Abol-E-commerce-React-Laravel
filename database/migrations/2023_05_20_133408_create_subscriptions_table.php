@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('subscriptionName');
             $table->decimal('subscriptionPrice', 8, 2);
-            $table->text('features');
+            $table->json('features');
             $table->timestamps();
         });
     }

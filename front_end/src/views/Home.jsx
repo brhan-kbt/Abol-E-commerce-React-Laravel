@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import buna1 from '../assets/buna1.jpg'
@@ -8,13 +8,14 @@ import buna3 from '../assets/buna3.jpg'
 import buna5 from '../assets/buna5.jpg'
 import bg1 from '../assets/bg-1.jpg'
 import axiosClient from '../axios'
-
+import { useStateContext } from '../contexts/ContextProvider'
+import AliceCarousel from 'react-alice-carousel';
+import 'react-alice-carousel/lib/alice-carousel.css';
 const Home = () => {
   const products = [
     {
       id: 1,
       name: 'Keffa Coffee',
-      href: '#',
       price: 'ETB 48',
       imageSrc: buna1,
       imageAlt: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.',
@@ -22,7 +23,6 @@ const Home = () => {
     {
       id: 2,
       name: 'Harar Coffee',
-      href: '#',
       price: 'ETB 35/KG',
       imageSrc: buna2,
       imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.',
@@ -30,7 +30,6 @@ const Home = () => {
     {
       id: 3,
       name: 'Wolega Coffee',
-      href: '#',
       price: 'ETB 89/KG',
       imageSrc: buna1,
       imageAlt: 'Person using a pen to cross a task off a productivity paper card.',
@@ -38,7 +37,6 @@ const Home = () => {
     {
       id: 4,
       name: 'Yirga Caffe Coffee',
-      href: '#',
       price: 'ETB 35/KG',
       imageSrc: buna5,
       imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
@@ -46,22 +44,91 @@ const Home = () => {
     // More products...
   ]
   const [users, setUsers] = useState([]);
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [adverts, setAdverts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    axiosClient.get('/products')
-    .then(response => {
-      const usersData= response.data; 
-      console.log('Products',usersData);
-      setUsers(usersData);
-      setIsLoading(false);
-    })
-    .catch(error => {
-      console.error(error);
-      setIsLoading(false)
-    });
-  }, [])
-  
+    const handleDragStart = (e) => e.preventDefault();
+
+    
+    
+    useEffect(() => {
+      axiosClient.get('/products')
+      .then(response => {
+        const usersData= response.data; 
+        console.log('Products',usersData);
+        setUsers(usersData);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setIsLoading(false)
+      });
+      axiosClient.get('/adverts')
+      .then(response => {
+        const usersData= response.data; 
+        console.log('Adverts',usersData);
+        setAdverts(usersData);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setIsLoading(false)
+      });
+      axiosClient.get('/subscriptions')
+      .then(response => {
+        const usersData= response.data; 
+        console.log('Products',usersData);
+        setSubscriptions(usersData);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setIsLoading(false)
+      });
+    }, [])
+    
+    const items = adverts.map(advert => (
+      <div key={advert.id}>
+        <h2>{advert.name}</h2>
+        <p>{advert.description}</p>
+        <img src={advert.photo} alt="" srcset="" />
+
+      </div>
+    ));
+    
+    const {userToken,currentUser,addToCart}=useStateContext();
+    
+  const handleAddToCart=(prod)=>{
+        
+    console.log('clicked',prod.product);
+    const productWithQuantity = { ...prod.product, quantity: 1 };
+    console.log(productWithQuantity);
+    addToCart(productWithQuantity);
+  }
+
+  const navigate=useNavigate();
+  const handleStart = () => {
+    if (userToken) {
+      navigate('/coffee-brand/dashboard');
+    } else {
+      navigate('/register');
+    }
+  };
+
+  const carouselOptions = {
+    items: items,
+    autoPlay: true,
+    autoPlayInterval: 3000,
+    infinite: true,
+    disableButtonsControls: true,
+    // disableDotsControls: true,
+    responsive: {
+      0: { items: 1 },
+      768: { items: 2 },
+      1024: { items: 3 },
+    },
+  };
   
   return (
     
@@ -116,6 +183,26 @@ const Home = () => {
         </div>
     </div>
 
+    <div className='bg-black'>
+      <h2 className='flex justify-center text-gray-300 font-bold p-5'>Advertisement</h2>
+   <AliceCarousel {...carouselOptions}>
+      {items.map((item, index) => (
+        <div key={index} className="carousel-item">
+          <div className="carousel-content">
+            <h2>{item.props.children[0]}</h2>
+            <p>{item.props.children[1]}</p>
+            <img
+              src={item.props.children[2].props.src}
+              alt=""
+              srcSet=""
+              style={{ maxHeight: '200px' }} // Set the maximum height for the image
+            />
+          </div>
+        </div>
+      ))}
+    </AliceCarousel>
+   </div>
+
     <div className="bg-[#B86919]">
       
     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-10 sm:py-24 lg:max-w-7xl lg:px-24">
@@ -124,9 +211,11 @@ const Home = () => {
       Explore our wide range of products in various categories. Find the perfect one for you.
     </p>
 
+
+
     <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
       {products.map((product) => (
-        <a key={product.id} href={product.href} className="group relative">
+        <Link to='/shop' key={product.id}  className="group relative">
           <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
             <img
               src={product.imageSrc}
@@ -138,7 +227,7 @@ const Home = () => {
               <p className="mt-1 text-2xl text-white font-italic font-bold">{product.price}</p>
             </div>
           </div>
-        </a>
+        </Link>
       ))}
     </div>
   </div>
@@ -175,28 +264,28 @@ const Home = () => {
             <>
             <ul className="grid grid-cols-2 gap-4">
               {users.slice(0, 2).map(product => (
-                <Link to={`/shop/${product.id}`} className="group relative block overflow-hidden" key={product.id}>
-                  {/* Product Image */}
+                <Link to={`/shop/${product.product.id}`} className="group relative block overflow-hidden" key={product.product.id}>
+                  {/* Product.product Image */}
                   <img
-                    src={product.photo}
+                    src={product.product.photo}
                     alt=""
                     className="h-64 w-full rounded-t-lg object-cover transition duration-500 group-hover:scale-105 sm:h-72"
                   />
 
-                  {/* Product Details */}
+                  {/* Product.product Details */}
                   <div className="relative border border-gray-100 bg-white p-6">
-                    {product.productName && (
+                    {product.product.productName && (
                       <span className="whitespace-nowrap bg-[#BA6D20] px-3 py-1.5 text-xs font-medium">
                         New
                       </span>
                     )}
 
-                    <h3 className="mt-4 text-lg font-medium text-gray-900">{product.productName}</h3>
+                    <h3 className="mt-4 text-lg font-medium text-gray-900">{product.product.productName}</h3>
 
-                    <p className="mt-1.5 text-sm text-gray-700">${product.productWeight}</p>
+                    <p className="mt-1.5 text-sm text-gray-700">${product.product.productWeight}</p>
 
                     <form className="mt-4">
-                      <button className="block w-full rounded bg-[#BA6D20] p-4 text-sm font-medium transition hover:scale-105">
+                      <button onClick={()=>handleAddToCart(product)} className="block w-full rounded bg-[#BA6D20] p-4 text-sm font-medium transition hover:scale-105">
                         Add to Cart
                       </button>
                     </form>
@@ -223,15 +312,15 @@ const Home = () => {
 
         <div class="grid grid-cols-1 gap-8 mt-6 xl:mt-12 xl:gap-12 md:grid-cols-2 lg:grid-cols-3">
             <div class="w-full p-8 space-y-8 text-center border border-gray-200 rounded-lg border-gray-700">
-                <p class="font-medium  uppercase ">Free</p>
+                <p class="font-medium  uppercase ">Basic</p>
 
                 <h2 class="text-4xl font-semibold  uppercase ">
-                    $0
+                   ETB 1000
                 </h2>
 
-                <p class="font-medium ">Life time</p>
+                <p class="font-medium ">Post Upto 15 Posts</p>
 
-                <button class="w-full px-4 py-2 mt-10 tracking-wide  capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                <button   onClick={handleStart} class="w-full px-4 py-2 mt-10 tracking-wide  capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-80">
                     Start Now
                 </button>
             </div>
@@ -240,12 +329,12 @@ const Home = () => {
                 <p class="font-medium text-gray-200 uppercase">Premium</p>
 
                 <h2 class="text-5xl font-bold  uppercase ">
-                    $40
+                    ETB 3000
                 </h2>
 
-                <p class="font-medium text-gray-200">Per month</p>
+                <p class="font-medium text-gray-200">Can Post Upto 20 Posts</p>
 
-                <button class="w-full px-4 py-2 mt-10 tracking-wide text-blue-500 capitalize transition-colors duration-300 transform bg-white rounded-md hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:ring focus:ring-gray-200 focus:ring-opacity-80">
+                <button   onClick={handleStart} class="w-full px-4 py-2 mt-10 tracking-wide text-blue-500 capitalize transition-colors duration-300 transform bg-white rounded-md hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:ring focus:ring-gray-200 focus:ring-opacity-80">
                     Start Now
                 </button>
             </div>
@@ -254,12 +343,12 @@ const Home = () => {
                 <p class="font-medium  uppercase ">Enterprise</p>
 
                 <h2 class="text-4xl font-semibold  uppercase ">
-                    $100
+                    2000
                 </h2>
 
-                <p class="font-medium ">Life time</p>
+                <p class="font-medium ">Can post upto 25 posts</p>
 
-                <button class="w-full px-4 py-2 mt-10 tracking-wide  capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                <button   onClick={handleStart} class="w-full px-4 py-2 mt-10 tracking-wide  capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-80">
                     Start Now
                 </button>
             </div>

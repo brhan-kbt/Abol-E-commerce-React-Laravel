@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import axiosClient from '../../axios';
 import Header from '../../Layout/Header';
-import SubscriptionForm from './SubscriptionForm';
 
 const ReviewRating = () => {
     const [users, setUsers] = useState([]);
@@ -217,13 +216,7 @@ const ReviewRating = () => {
             />
           </Box>
         )}
-         <SubscriptionForm
-          role={selectedProduct}
-          openDialog={openDialog}
-          onClose={handleDialogClose}
-          handleEdit={handleProductFormSubmit}
-          handleAdd={handleProductFormSubmit}
-        />
+        
     </Box>
   </>
   )

@@ -19,12 +19,14 @@ class ProductResource extends JsonResource
             'productName' => $this->productName,
             'productType' => $this->productType,
             'productWeight' => $this->productWeight,
+            'price' => $this->price,
             'brand' => $this->brand,
             'photo' => $this->photo,
+            'user_id' => $this->user_id,
             'status'=>$this->status,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
-            'user' => new UserAccountResource($this->userAccount),
+            'user' => new UserAccountResource($this->user),
             // Include any other attributes or computed properties you need
         ];
     }

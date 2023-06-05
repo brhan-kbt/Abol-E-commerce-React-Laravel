@@ -14,12 +14,27 @@ const Layout = () => {
   const [isSidebarOpen,setIsSidebarOpen]=useState(true);
 
 
+
   // const {userToken}=useStateContext();
   const user=localStorage.getItem('abol_user');
 
   // if (user.normalize.name !== 'admin') {
   //   return  <Navigate to='/login'/>
   // }
+
+  const {currentUser,userToken}=useStateContext();
+  if (!userToken) {
+    return <Navigate to="/login" />;
+}
+  if (currentUser.role.name !== 'admin') {
+    if (currentUser.role.name === 'coffeebrand') {
+      return <Navigate to="/coffee-brand/dashboard" />;
+    } else if (currentUser.role.name === 'customer') {
+      return <Navigate to="/customer/dashboard" />;
+    } else {
+      return <Navigate to="/login" />;
+    }
+  }
 
 
   return (

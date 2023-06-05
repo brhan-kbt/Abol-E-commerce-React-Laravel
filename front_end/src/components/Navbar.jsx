@@ -149,7 +149,7 @@ const Navbar = () => {
                     aria-labelledby="dropdownMenuButton2"
                     data-te-dropdown-menu-ref
                   >
-                {currentUser && currentUser.role && currentUser.role.name === 'coffeebrand' && (
+                    {currentUser && currentUser.role && currentUser.role.name === 'coffeebrand' && (
                       <>
                       <li>
                         <Link
@@ -183,7 +183,7 @@ const Navbar = () => {
                           </Link>
                         </li>
 
-                        <li>
+                        {/* <li>
                           <Link
                             className="block w-full  whitespace-nowrap bg-transparent px-10 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
                             to="/profile"
@@ -192,7 +192,7 @@ const Navbar = () => {
                             <Settings />
                             Setting
                           </Link>
-                        </li>
+                        </li> */}
                       </>
                     )}
 
@@ -208,7 +208,7 @@ const Navbar = () => {
                           My Dashboard
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                       <Link
                         className="block w-full  whitespace-nowrap bg-transparent px-10 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
                         to="/profile"
@@ -217,7 +217,7 @@ const Navbar = () => {
                         <Settings />
                         Setting
                       </Link>
-                    </li>
+                    </li> */}
                     </>
                     )}
 
@@ -251,6 +251,14 @@ const Navbar = () => {
                 >
                   Sign Up
                 </Link>
+                <Link to="/cart" className="relative">
+                <ShoppingCart sx={{width:'40px'}} className="text-[#B5681B]  rounded-full" />
+                {cartTotal > 0 && (
+                  <span className="absolute top-0 right-0 -mt-1 -mr-1 px-2 py-1   text-white text-xs font-semibold rounded-full">
+                    {cartTotal}
+                  </span>
+                )}
+              </Link>
               </>
             )}
   
@@ -264,7 +272,7 @@ const Navbar = () => {
                 <Link className="mr-auto text-3xl font-bold leading-none" to="/">
                   <img className="h-20" src={logo} alt="" />
                 </Link>
-                <button className="navbar-close" >
+                <button className="navbar-close" onClick={handleMenuToggle}>
                 <svg className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
@@ -313,9 +321,74 @@ const Navbar = () => {
                         Contact Us
                     </Link>
                     </li>
-                </ul>
+                    {currentUser && currentUser.role && currentUser.role.name === 'coffeebrand' && (
+                      <>
+                      <li>
+                        <Link
+                          className="block w-full  whitespace-nowrap bg-transparent pl-4  py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                          to="/coffee-brand/dashboard"
+                          data-te-dropdown-item-ref
+                        >
+                          My Dashboard
+                        </Link>
+                      </li>
+                      <li></li>
+                        <li>
+                          <Link
+                            className="block w-full whitespace-nowrap bg-transparent pl-4  py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                            to="/coffee-brand/post"
+                            data-te-dropdown-item-ref
+                          >
+                            My Products
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="block w-full whitespace-nowrap bg-transparent      pl-4  py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                            to="/coffee-brand/advert"
+                            data-te-dropdown-item-ref
+                          >
+                            My Adverts
+                          </Link>
+                        </li>
+
+                       
+                      </>
+                    )}
+
+                    {currentUser && currentUser.role && currentUser.role.name === 'customer' && (
+                      <>
+                      <li>
+                        <Link
+                          className="block w-full  whitespace-nowrap bg-transparent  pl-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                          to="/customer/dashboard"
+                          data-te-dropdown-item-ref
+                        >
+                          My Dashboard
+                        </Link>
+                      </li>
+                      <li>
+                      
+                    </li>
+                    </>
+                    )}
+
+    
+                    <li>
+                      <a
+                        className="block w-full pl-4 whitespace-nowrap bg-transparent  py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
+                        data-te-dropdown-item-ref
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </a>
+                    </li>
+                  </ul>
             </div>
-            <div className="mt-auto">
+
+            {!currentUser && !currentUser.role && !currentUser.role.name&&
+              
+              <div className="mt-auto">
                 <div className="pt-6">
                 <Link className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100 rounded-xl" 
                 to="/login">
@@ -329,7 +402,7 @@ const Navbar = () => {
                 <p className="my-4 text-xs text-center text-gray-400">
                 <span>Copyright © 2023</span>
                 </p>
-            </div>
+            </div>}
             </nav>
         )}
       </section>

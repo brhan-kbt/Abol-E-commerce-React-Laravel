@@ -1,10 +1,11 @@
-import { Add, Delete, Edit } from '@mui/icons-material';
+import { Add, Delete, Details, Edit } from '@mui/icons-material';
 import { Box, Button, CircularProgress, IconButton, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import CoffeeForm from './CoffeeForm';
 import axiosClient from '../../axios';
 import Header from '../../Layout/Header';
+import { useNavigate } from 'react-router-dom';
 
 const Coffee = () => {
     const [users, setUsers] = useState([]);
@@ -12,31 +13,76 @@ const Coffee = () => {
 
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
-
+    const [errors,setErrors]=useState({});
     const handleProductFormSubmit = (product) => {
-        if (product.id) {
-          // product has an ID, perform edit operation
-          console.log(" Edit Product:", product);
-           axiosClient.put(`/products/${product.id}`, product)
-             .then(response => {
-               console.log(response)
-               handleDialogClose();
-             })
-             .catch(error => {
-               console.error(error);
-             });
-        } else {
-          // product doesn't have an ID, perform add operation
-          console.log("Add product:", product);
-           axiosClient.post('/products', product)
-             .then(response => {
-               console.log(response)
-             })
-             .catch(error => {
-               console.error(error);
-             });
-        }
+      if (product.id) {
+        // product has an ID, perform edit operation
+        console.log("Edit Product:", product);
+        axiosClient
+          .put(`/products/${product.id}`, product)
+          .then((response) => {
+            console.log(response);
+            handleDialogClose();
+            // Refetch the data for the DataGrid
+            axiosClient.get('/products')
+              .then(response => {
+                const usersData = response.data;
+                console.log('Products', usersData);
+                setUsers(usersData);
+                setIsLoading(false);
+              })
+              .catch(error => {
+                console.error(error);
+                setIsLoading(false)
+              });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        // product doesn't have an ID, perform add operation
+        console.log("Add product:", product);
+        axiosClient
+          .post('/products', product)
+          .then((response) => {
+            console.log(response);
+            // Refetch the data for the DataGrid
+            handleDialogClose();
+
+            axiosClient.get('/products')
+              .then(response => {
+                const usersData = response.data;
+                console.log('Products', usersData);
+                setUsers(usersData);
+                setIsLoading(false);
+                 // Refetch the data for the DataGrid
+                    axiosClient.get('/products')
+                    .then(response => {
+                      const usersData = response.data;
+                      console.log('Products', usersData);
+                      setUsers(usersData);
+                      setIsLoading(false);
+                    })
+                    .catch(error => {
+                      console.error(error);
+                      setIsLoading(false)
+                    });
+              })
+              .catch(error => {
+                console.error(error);
+                setIsLoading(false)
+              });
+          })
+          .catch((error) => {
+            if (error && error.response && error.response.data) {
+              setErrors(error.response.data.errors);
+              console.log(error.response.data.errors);
+            }
+            console.error(error);
+          });
       }
+    };
+    
       
 
       const deleteRow = (id) => {
@@ -51,8 +97,11 @@ const Coffee = () => {
               
             })
             .catch((error) => {
-              // Handle errors
-              console.error(error);
+              if (error && error.response && error.response.data) {
+                setErrors(error.response.data.errors);
+                console.log(error.response.data.errors);
+              }
+               console.error(error);
             });
         }
       };
@@ -100,26 +149,12 @@ const Coffee = () => {
           flex: 0.5,
           valueGetter: (params) => params.row.product.productName,
         },
-        {
-          field: "photo",
-          headerName: "Product Photo",
-          flex: 0.5,
-          renderCell: (params) => {
-            return (
-              <img
-                src={params.row.product.photo}
-                alt="Product"
-                style={{ width: 50, height: 50, borderRadius: 50 }}
-              />
-            );
-          },
-        },
-        {
-          field: "productType",
-          headerName: "Product Type",
-          flex: 0.5,
-          valueGetter: (params) => params.row.product.productType,
-        },
+        // {
+        //   field: "productType",
+        //   headerName: "Product Type",
+        //   flex: 0.5,
+        //   valueGetter: (params) => params.row.product.productType,
+        // },
         {
           field: "productWeight",
           headerName: "Product Weight",
@@ -159,6 +194,9 @@ const Coffee = () => {
                 <IconButton sx={{ color: "red" }} onClick={() => deleteRow(params.row.id)}>
                   <Delete />
                 </IconButton>
+                <IconButton sx={{ color: "orange" }} onClick={() => handleRowClick(params.row)}>
+                  <Details />
+                </IconButton>
               </Box>
             );
           },
@@ -169,8 +207,16 @@ const Coffee = () => {
         setSelectedProduct({}); // Reset selectedProduct to null
         console.log('clicked');
         setOpenDialog(true);
+        setErrors({});
 
       };
+
+      const navigate=useNavigate();
+      const handleRowClick=(params)=>{
+        console.log("Hjhddkhfhk",params);
+        const product=params;
+        navigate('/product/detail',{state:{data:product}})
+      }
     
   return (
     <>
@@ -238,6 +284,7 @@ const Coffee = () => {
           onClose={handleDialogClose}
           handleEdit={handleProductFormSubmit}
           handleAdd={handleProductFormSubmit}
+          errors={errors}
         />
     </Box>
   </>

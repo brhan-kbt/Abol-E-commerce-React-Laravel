@@ -14,13 +14,14 @@ export default function SubscriptionForm({
   openDialog,
   onClose,
   subscription,
+  errors
 }) {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState('');
   const [formData, setFormData] = useState({
     subscriptionName: subscription?.subscriptionName || '',
     subscriptionPrice: subscription?.subscriptionPrice || '',
-    features: subscription?.features || [],
+    features: subscription?.features ? JSON.parse(subscription.features) : [],
   });
 
   const handleClickOpen = () => {
@@ -38,7 +39,7 @@ export default function SubscriptionForm({
       setFormData({
         subscriptionName: subscription.subscriptionName || '',
         subscriptionPrice: subscription.subscriptionPrice || '',
-        features: subscription.features || [],
+        features: subscription.features ? JSON.parse(subscription.features) : [],
       });
       setId(subscription.id);
     }
@@ -70,6 +71,7 @@ export default function SubscriptionForm({
     }
   };
 
+  console.log(errors)
   return (
     <div>
       <form onSubmit={handleSubscribe}>
@@ -91,6 +93,11 @@ export default function SubscriptionForm({
                 required
                 sx={{ marginTop: '16px', marginBottom: '16px' }}
               />
+                  {errors.subscriptionName&&
+                
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                  {errors&&errors.subscriptionName}
+                  </small>}
               <TextField
                 id="subscriptionPrice"
                 label="Subscription Price"
@@ -101,8 +108,13 @@ export default function SubscriptionForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
+               {errors.subscriptionPrice&&
+                
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                  {errors&&errors.subscriptionPrice}
+                  </small>}
               <TextField
                 id="features"
                 label="Subscription Features"
@@ -113,8 +125,13 @@ export default function SubscriptionForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
+               {errors&&errors.features&&
+                
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                  {errors.features}
+                  </small>}
             </Box>
           </DialogContent>
           <DialogActions>

@@ -11,7 +11,7 @@ class SubscriptionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,7 @@ class SubscriptionRequest extends FormRequest
         return [
             'subscriptionName' => 'required|string',
             'subscriptionPrice' => 'required|numeric',
-            'features' => 'required|array',
+            'features' => ['required', 'array'],
             'features.*' => 'string',
         ];
     }

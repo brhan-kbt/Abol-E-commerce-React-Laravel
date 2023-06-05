@@ -2,6 +2,8 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import CoffeeBrand from "./admin/CoffeeBrand";
 import Customer from "./admin/Customer";
 import Dashboard from "./admin/Dashboard";
+import MessageDetail from "./admin/MessageDetail";
+import Messages from "./admin/Messages";
 import Delivery from "./admin/OrderModule/Delivery";
 import Order from "./admin/OrderModule/Order";
 import OrderDetailAdmin from "./admin/OrderModule/OrderDetailAdmin";
@@ -9,6 +11,7 @@ import Payment from "./admin/OrderModule/Payment";
 import Overview from "./admin/Overview";
 import Advertisement from "./admin/ProductModule/Advertisement";
 import Coffee from "./admin/ProductModule/Coffee";
+import ProductDetail from "./admin/ProductModule/ProductDetail";
 import ReviewRating from "./admin/ProductModule/ReviewRating";
 import Subscription from "./admin/ProductModule/Subscription";
 import Role from "./admin/Roles";
@@ -17,6 +20,7 @@ import Layout from "./Layout/Layout";
 import About from "./views/About";
 import Cart from "./views/Cart";
 import Checkout from "./views/checkout";
+import { CheckoutDone } from "./views/checkoutDone";
 import CoffeeBrandDashborad from "./views/coffebrand/coffebranddashboard";
 import Advert from "./views/coffebrand/postadvert";
 import Product from "./views/coffebrand/postproduct";
@@ -65,6 +69,10 @@ const router = createBrowserRouter([
     path: "/checkout",
     element: <Checkout />,
   },
+  {
+    path: "/checkout/done",
+    element: <CheckoutDone />,
+  },
 
   {
     path: "/shop/:id",
@@ -112,6 +120,11 @@ const router = createBrowserRouter([
       },
 
       {
+        path: "/product/detail",
+        element: <ProductDetail />,
+      },
+
+      {
         path: "/subscription",
         element: <Subscription />,
       },
@@ -123,6 +136,10 @@ const router = createBrowserRouter([
       {
         path: "/review&rating",
         element: <ReviewRating />,
+      },
+      {
+        path: "/messages",
+        element: <Messages />,
       },
 
 
@@ -140,6 +157,10 @@ const router = createBrowserRouter([
       {
         path: "/delivery",
         element: <Delivery />,
+      },
+      {
+        path: "/messages/detail",
+        element: <MessageDetail />,
       },
       {
         path: "/payment",

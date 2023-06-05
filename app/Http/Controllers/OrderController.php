@@ -36,6 +36,9 @@ class OrderController extends Controller
                   'user_id' => '',
                   'status' => '',
                   'products' => '',
+                  'payment' => '',
+                  'delivery_entity_id' => '',
+                  'totalprice' => '',
                 //  'items.*.product_id' => '',
                 //  'items.*.quantity' => '',
                 //  'items.*.price' => 'required|numeric',
@@ -44,6 +47,9 @@ class OrderController extends Controller
             // Create the order
             $order = Order::create([
                 'address' => $validatedData['address'],
+                'payment' => $validatedData['payment'],
+                'delivery_entity_id' => $validatedData['delivery_entity_id'],
+                'totalprice' => $validatedData['totalprice'],
                 'user_id' => $validatedData['user_id'],
                 'status' => $validatedData['status'],
             ]);

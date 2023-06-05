@@ -3,6 +3,7 @@ import { Button, Card, CardActions, CardContent, CircularProgress, Dialog, Dialo
 import { Box } from '@mui/system';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react'
+import { Navigate } from 'react-router-dom';
 import axiosClient from '../../axios';
 import Footer from '../../components/Footer'
 import Navbar from '../../components/Navbar'
@@ -11,11 +12,26 @@ import Header from '../../Layout/Header';
 
 const CustomerDashboard = () => {
 
-  const {currentUser}  = useStateContext();
+
+  const {currentUser,userToken}  = useStateContext();
   const [order, setOrder] = useState([]);
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  if (!userToken) {
+    return <Navigate to="/login" />;
+}
+
+  if (currentUser.role.name !== 'customer') {
+    if (currentUser.role.name === 'admin') {
+      return <Navigate to="/dashboard" />;
+    } else if (currentUser.role.name === 'coffeebrand') {
+      return <Navigate to="/coffee-brand/dashboard" />;
+    } else {
+      return <Navigate to="/login" />;
+    }
+  }
   useEffect(() => {
     axiosClient.get(`/orders/${currentUser.id}`)
       .then(response => {
@@ -112,12 +128,12 @@ const CustomerDashboard = () => {
 
     <>
     <Navbar/>
-      <Box m="3rem 2.5rem">
-          <Header title="Customer Dashboard" style="padding:30px !important;"/>
+      <Box m="5rem 2.5rem">
+          <Header title="My Orders" subtitle='' style="padding:30px !important;"/>
           
           <div className='flex '>
           <Box
-          className='w-1/2'
+          className='md:w-1/2'
           padding='40px'
           pt='0px'
           height="75vh"
@@ -168,7 +184,7 @@ const CustomerDashboard = () => {
             />
         )}
           </Box>
-          <Box className='w-1/2'>
+          <Box className='md:w-1/2'>
           
                        {selectedRowData && <>
                             <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: '700' }}>Order Detail</Typography>

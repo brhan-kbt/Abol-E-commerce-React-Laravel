@@ -6,6 +6,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RatingReviewController;
+use App\Http\Controllers\AdvertisementController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\SubscriptionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -39,5 +44,11 @@ Route::resource('products', ProductController::class);
 Route::resource('orders', OrderController::class);
 Route::get('products/{id}', [ProductController::class, 'singleProduct']);
 Route::get('products/user/{id}', [ProductController::class, 'specificUserProducts']);
+Route::get('productsbyrating/user/{id}', [ProductController::class, 'getProductsByRating']);
 Route::post('/orders', [OrderController::class, 'store']);
 Route::resource('reviews', RatingReviewController::class);
+Route::resource('adverts', AdvertisementController::class);
+Route::get('adverts/user/{id}', [AdvertisementController::class, 'specificUserAdverts']);
+Route::resource('contacts', ContactController::class);
+Route::resource('delivery', DeliveryController::class);
+Route::resource('subscriptions', SubscriptionController::class);

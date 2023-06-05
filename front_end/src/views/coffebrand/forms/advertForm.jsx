@@ -8,21 +8,24 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useStateContext } from '../../../contexts/ContextProvider';
 
 export default function AdvertForm({
   handleEdit,
   handleAdd,
   openDialog,
   onClose,
-  role,
+  advert,
+  errors
 }) {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState('');
+  const {currentUser}=useStateContext();
   const [formData, setFormData] = useState({
-    productName: role?.productName || '',
-    productType: role?.productType || '',
-    productWeight: role?.productWeight || '',
-    brand: role?.brand || '',
+    advertisementBrand: advert?.advertisementBrand || '',
+    advertisementOwner: advert?.advertisementOwner || '',
+    advertisementType: advert?.advertisementType || '',
+    user_id:currentUser.id,
     photo: null,
   });
 
@@ -37,33 +40,36 @@ export default function AdvertForm({
 
   useEffect(() => {
     setOpen(openDialog);
-    if (role) {
+    console.log('Au:',advert);
+    if (advert) {
       setFormData({
-        productName: role.productName || '',
-        productType: role.productType || '',
-        productWeight: role.productWeight || '',
-        brand: role.brand || '',
-        price: role.price || '',
+        advertisementBrand:advert.advertisementBrand || '',
+        advertisementOwner:advert.advertisementOwner || '',
+        advertisementType:advert.advertisementType || '',
+        user_id:advert.user_id,
+        status:0,
         photo: null,
       });
-      setId(role.id);
+      setId(advert.id);
     }
-  }, [role]);
+  }, [advert]);
 
   const handleSubscribe = () => {
     const updatedFormData = id ? { ...formData, id } : formData;
 
-    if (role && role.id) {
+    if (advert &&advert.id) {
       
       handleEdit(updatedFormData);
     } else {
       const formData = new FormData();
-      formData.append('productName', updatedFormData.productName);
-      formData.append('productType', updatedFormData.productType);
-      formData.append('productWeight', updatedFormData.productWeight);
-      formData.append('brand', updatedFormData.brand);
-      formData.append('price', updatedFormData.price);
+      formData.append('advertisementBrand', updatedFormData.advertisementBrand);
+      formData.append('advertisementOwner', updatedFormData.advertisementOwner);
+      formData.append('advertisementType', updatedFormData.advertisementType);
       formData.append('photo', updatedFormData.photo);
+      formData.append('user_id', currentUser.id);
+      formData.append('status', 0);
+
+      console.log(currentUser.id);
 
       handleAdd(formData);
     }
@@ -85,84 +91,78 @@ export default function AdvertForm({
     }));
   };
 
+  console.log(errors);
+
   return (
     <div>
       <form onSubmit={handleSubscribe}>
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle className="flex justify-center font-bold">
-            Add Product
+            Add Advert
           </DialogTitle>
           <DialogContent sx={{ padding: '16px' }}>
             <Box sx={{ maxHeight: '300px', overflowY: 'auto' }}>
               <TextField
-                id="productName"
-                label="Product Name"
+                id="advertisementBrand"
+                label="Advert Brand"
                 type="text"
-                name="productName"
-                value={formData.productName}
+                name="advertisementBrand"
+                value={formData.advertisementBrand}
                 onChange={handleFormChange}
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginTop: '16px', marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
+              {errors.advertisementBrand&&
+                
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                  {errors.advertisementBrand}
+                  </small>}
               <TextField
-                id="productType"
-                label="Coffee Brand Name"
+                id="advertisementType"
+                label="Advert Type"
                 type="text"
-                name="productType"
-                value={formData.productType}
+                name="advertisementType"
+                value={formData.advertisementType}
                 onChange={handleFormChange}
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
-              <TextField
-                id="productWeight"
-                label="Product Weight"
-                type="text"
-                name="productWeight"
-                value={formData.productWeight}
-                onChange={handleFormChange}
-                autoComplete="off"
-                fullWidth
-                required
-                sx={{ marginBottom: '16px' }}
-              />
-
+                {errors.advertisementType&&
+                
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                  {errors.advertisementType}
+                  </small>}
               <TextField
                 id="price"
-                label="Product Price"
+                label="Advert Owner"
                 type="text"
-                name="price"
-                value={formData.price}
+                name="advertisementOwner"
+                value={formData.advertisementOwner}
                 onChange={handleFormChange}
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
 
-              <TextField
-                id="brand"
-                label="Product Brand"
-                type="text"
-                name="brand"
-                value={formData.brand}
-                onChange={handleFormChange}
-                autoComplete="off"
-                fullWidth
-                required
-                sx={{ marginBottom: '16px' }}
-              />
-
+            {errors.advertisementOwner&&
+                
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                  {errors.advertisementOwner}
+                  </small>}
+                  <div>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handlePhotoChange}
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '40px' }}
               />
+
+                  </div>
             </Box>
           </DialogContent>
           <DialogActions>

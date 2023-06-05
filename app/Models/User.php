@@ -64,4 +64,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Product::class);
     }
+
+    public function advertisements()
+    {
+        return $this->hasMany(Advertisement::class);
+    }
+
+    public function contacts()
+{
+    return $this->hasMany(Contact::class);
+}
+
 }

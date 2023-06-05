@@ -8,13 +8,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\RatingReview;
+use Illuminate\Support\Facades\DB;
+
 class ProductController extends Controller
 {
    // ProductController.php
 
    public function index()
    {
-       $products = Product::with('reviews')->get();
+       $products = Product::with('reviews')->withCount('orderItems')->get();
    
        $productsWithAverageRating = $products->map(function ($product) {
            $totalRating = $product->reviews->sum('rating');
@@ -23,16 +25,21 @@ class ProductController extends Controller
            // Generate a unique ID for the row
            $rowId = $product->id;
    
+           // Set count_order_items to null if it's 0
+           $countOrderItems = $product->order_items_count >= 0 ? $product->order_items_count : 0;
+   
            return [
                'id' => $rowId, // Assign the generated ID to the row
                'product' => $product,
                'average_rating' => $averageRating,
-               'user' => $product->user // Assuming the product belongs to a user relationship
+               'user' => $product->user, // Assuming the product belongs to a user relationship
+               'order_items_count' => $countOrderItems,
            ];
        });
    
        return response()->json($productsWithAverageRating);
    }
+   
    
 
     public function store(ProductRequest $request)
@@ -132,10 +139,18 @@ class ProductController extends Controller
 
 
     public function destroy(Product $product)
-    {
-        $product->delete();
-        return response()->json(null, 204);
-    }
+{
+    // Delete associated reviews
+     // Delete the associated order items
+    $product->orderItems()->delete();
+    $product->reviews()->delete();
+
+    // Delete the product
+    $product->delete();
+
+    return response()->json(null, 204);
+}
+
 
 
     public function specificUserProducts($id)
@@ -145,4 +160,37 @@ class ProductController extends Controller
 
         return ProductResource::collection($products);
     }
+
+    public function getProductsByRating($userId)
+    {
+        // Find the user
+        $user = User::findOrFail($userId);
+    
+        // Get the products associated with the user
+        $products = $user->products()->withCount('orderItems')->get();
+    
+        // Create an array to store the modified product data
+        $modifiedProducts = [];
+    
+        // Iterate through each product and calculate the average rating
+        foreach ($products as $product) {
+            $averageRating = $product->reviews()->average('rating');
+            $product->average_rating = $averageRating;
+            $product->load('reviews');
+    
+            // Append the modified product to the array
+            $modifiedProducts[] = $product;
+        }
+    
+        // Sort the products by average rating and count of orders
+        $modifiedProducts = collect($modifiedProducts)->sortBy([
+            ['average_rating', 'desc'],
+            ['order_items_count', 'desc'],
+        ])->values()->all();
+    
+        return $modifiedProducts;
+    }
+    
+    
+    
 }

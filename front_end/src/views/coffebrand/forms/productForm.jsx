@@ -16,6 +16,7 @@ export default function ProductForm({
   openDialog,
   onClose,
   product,
+  errors
 }) {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState('');
@@ -40,6 +41,7 @@ export default function ProductForm({
 
   useEffect(() => {
     setOpen(openDialog);
+    console.log('dasddsdsa',product);
     if (product) {
       setFormData({
         productName: product.productName || '',
@@ -94,6 +96,8 @@ export default function ProductForm({
     }));
   };
 
+  console.log('Errors',errors);
+
   return (
     <div>
       <form onSubmit={handleSubscribe}>
@@ -113,8 +117,13 @@ export default function ProductForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginTop: '16px', marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
+              {errors.productName&&
+                
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                  {errors.productName}
+                  </small>}
              
               <TextField
                 id="productWeight"
@@ -126,8 +135,13 @@ export default function ProductForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
+               {errors.productWeight&&
+                
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                 { errors.productWeight}
+                  </small>}
 
               <TextField
                 id="price"
@@ -139,9 +153,12 @@ export default function ProductForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
-
+              {errors.productType&&
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                 { errors.productType}
+                  </small>}
               <TextField
                 id="price"
                 label="Product Price"
@@ -152,8 +169,12 @@ export default function ProductForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
+               {errors.price&&
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                  {errors.price}
+                  </small>}
 
               <TextField
                 id="brand"
@@ -165,15 +186,21 @@ export default function ProductForm({
                 autoComplete="off"
                 fullWidth
                 required
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '16px' }}
               />
+               {errors.brand&&
+                <small className='font-bold text-red-500' >
+                 { errors.brand}
+                  </small>}
 
+              <div>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handlePhotoChange}
-                sx={{ marginBottom: '16px' }}
+                sx={{ marginTop: '40px' }}
               />
+              </div>
             </Box>
           </DialogContent>
           <DialogActions>

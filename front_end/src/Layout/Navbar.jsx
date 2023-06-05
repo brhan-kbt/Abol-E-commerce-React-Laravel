@@ -9,6 +9,7 @@ import {
     SettingsOutlined,
     ArrowDropDownOutlined,
     LogoutOutlined,
+    Person,
   } from "@mui/icons-material";
 
 import {
@@ -35,6 +36,7 @@ import { useStateContext } from '../contexts/ContextProvider';
     const handleLogout = () => {
       localStorage.removeItem('abol_token')
        router('/login');
+       window.location.reload(); // Force page reload
     }
     const handleSetting = () => {
       // localStorage.removeItem('abol_token')
@@ -103,15 +105,15 @@ import { useStateContext } from '../contexts/ContextProvider';
               }}
             >
               <Box
-                component="img"
                 alt="profile"
-                src={logo}
                 height="32px"
                 width="32px"
                 border='1px solid black'
                 borderRadius="50%"
                 sx={{ objectFit: "cover" }}
-              />
+              >
+                <Person/>
+                </Box>
               <Box textAlign="left">
                 <Typography
                   fontWeight="bold"
@@ -137,7 +139,7 @@ import { useStateContext } from '../contexts/ContextProvider';
               open={isOpen}
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             >
-              <MenuItem onClick={handleSetting}><SettingsOutlined sx={{mr:'1rem'}}/> Settings</MenuItem>
+              {/* <MenuItem onClick={handleSetting}><SettingsOutlined sx={{mr:'1rem'}}/> Settings</MenuItem> */}
               <MenuItem onClick={handleLogout}><LogoutOutlined sx={{mr:'1rem'}}/>Log Out</MenuItem>
             </Menu>
           </FlexBetween>

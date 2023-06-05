@@ -37,7 +37,7 @@ const ShopDetail = () => {
     }, [])
 
     const handleAddToCart=()=>{
-      const productWithQuantity = { ...product, quantity: 1 };
+      const productWithQuantity = { ...product.product, quantity: 1 };
       console.log(productWithQuantity);
       addToCart(productWithQuantity);
     }

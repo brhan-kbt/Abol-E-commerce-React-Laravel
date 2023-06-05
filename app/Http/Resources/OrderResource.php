@@ -19,9 +19,14 @@ class OrderResource extends JsonResource
             'address' => $this->address,
             'customer' => new UserAccountResource($this->user), // Assuming you have a CustomerResource
             'status' => $this->status,
+            'totalprice' => $this->totalprice,
+            'payment' => $this->payment,
             'items' => OrderItemResource::collection($this->items), // Assuming you have an OrderItemResource
             'created_at' => $this->created_at,
+            'delivery_entity_id' => $this->delivery_entity_id,
+            'delivery' => new DeliveryResource($this->delivery),
             'updated_at' => $this->updated_at,
+
         ];
     }
 }

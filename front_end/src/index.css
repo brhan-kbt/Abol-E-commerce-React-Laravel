@@ -1,7 +1,7 @@
+@import "react-alice-carousel/lib/alice-carousel.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 ::-webkit-scrollbar {
     width: 0px;  /* Remove scrollbar space */
     background: transparent;  /* Optional: just make scrollbar invisible */
@@ -13,6 +13,22 @@
     align-items: center;
     margin-top: 20px;
   }
+  .carousel-container {
+  max-height: 300px; /* Adjust the height as per your requirement */
+}
+
+.carousel-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.carousel-item {
+  margin-top: 30px !important; /* Adjust the right margin to reduce the gap */
+  padding: 0px !important;
+}
+
   
   .pagination__link {
     background-color: #B86919;

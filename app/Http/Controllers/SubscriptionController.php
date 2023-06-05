@@ -23,10 +23,23 @@ class SubscriptionController extends Controller
         return response()->json(new SubscriptionResource($subscription), 200);
     }
 
-    public function store(SubscriptionRequest $request)
+    public function store(Request $request)
     {
-        $subscription = Subscription::create($request->validated());
-
+        $validatedData = $request->validate([
+            'subscriptionName' => 'required',
+            'subscriptionPrice' => 'required|numeric',
+            'features' => 'required|array',
+        ]);
+        
+        $subscriptionName = $validatedData['subscriptionName'];
+        $subscriptionPrice = $validatedData['subscriptionPrice'];
+        $features = $validatedData['features'];
+        
+        $subscription = new Subscription();
+        $subscription->subscriptionName = $subscriptionName;
+        $subscription->subscriptionPrice = $subscriptionPrice;
+        $subscription->features = json_encode($features);
+        $subscription->save();
         return response()->json(new SubscriptionResource($subscription), 201);
     }
 
@@ -48,4 +61,3 @@ class SubscriptionController extends Controller
         return response()->json(null, 204);
     }
 }
-

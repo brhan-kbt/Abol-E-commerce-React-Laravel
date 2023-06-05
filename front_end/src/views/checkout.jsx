@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import axiosClient from '../axios'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
@@ -7,9 +7,16 @@ import { useStateContext } from '../contexts/ContextProvider'
 
 const Checkout = () => {
   const [deliveryOption, setDeliveryOption] = useState('');
-
-  const {currentUser,cartItems,setCartItems}=useStateContext();
+  const [formData, setFormData] = useState({
+    address: '', // Initial address value
+  });
+  const {currentUser,userToken,cartItems,setCartItems,removeAllCart}=useStateContext();
   console.log(cartItems);
+
+  if (!userToken) {
+      return <Navigate to="/login" />;
+  }
+
   const handleQuantityChange = (itemId, quantity) => {
     // Find the item in the cartItems array
     const updatedCartItems = cartItems.map((item) => {
@@ -42,29 +49,53 @@ const Checkout = () => {
     setDeliveryOption(event.target.value);
   };
 
+  
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const orderData = {
     user_id: currentUser.id, // Get customer details from form inputs
     products: cartItems.map((item) => ({
       name: item.id,
       quantity: item.quantity,
-      product_id:item.id
+      product_id: item.id,
     })),
-    address:'AA',
-    status:'pending'
+    payment: 'chapa', // Include the selected delivery option
+    delivery_entity_id: deliveryOption, // Include the selected delivery option
+    address: formData.address, // Use address value from the form
+    totalprice:(calculateVAT() + calculateTotalCost()).toFixed(2),
+    status: 'pending',
   };
 
+  const navigate=useNavigate();
   const submitOrder=(e)=>{
     e.preventDefault();
     console.log(orderData);
-    axiosClient.post(`/orders`,orderData)
+     axiosClient.post(`/orders`,orderData)
+       .then(response => {
+         console.log(response.data.data);
+         const data=response.data.data;
+        navigate('/checkout/done',{state:{data}})
+         removeAllCart();
+       })
+       .catch(error => {
+         console.error(error);
+       });
+  }
+
+  const [delivery,setDelivery]=useState([]);
+  useEffect(() => {
+    axiosClient.get(`/delivery`)
       .then(response => {
-        console.log(response);
+        console.log(response.data.data);
+        setDelivery(response.data.data)
       })
       .catch(error => {
         console.error(error);
       });
-  }
+  }, [])
+  
 
   return (
     <>
@@ -132,7 +163,7 @@ const Checkout = () => {
               <p class="mb-1 text-lg font-bold">{(calculateTotalCost() + calculateVAT()).toFixed(2)}</p>
             </div>
           </div>
-          <Link to={`/checkout`} className="mt-6 text-center w-full block rounded-md bg-[#BA6D20] py-1.5 font-medium text-blue-50 hover:bg-gray-700">Check out</Link>
+          {/* <Link to={`/checkout`} className="mt-6 text-center w-full block rounded-md bg-[#BA6D20] py-1.5 font-medium text-blue-50 hover:bg-gray-700">Check out</Link> */}
         </div>    
         
       </div>
@@ -143,56 +174,18 @@ const Checkout = () => {
 
       <div className="mx-auto max-w-lg px-4 lg:px-8">
         <form className="grid grid-cols-6 gap-4">
-          
 
           <div className="col-span-12">
-            <label
-              htmlFor="LastName"
-              className="block text-xs font-medium text-gray-700"
-            >
-              Full Name
+            <label htmlFor="address" className="block text-xs font-medium text-gray-700">
+              Address
             </label>
 
             <input
               type="text"
-              id="LastName"
-              className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-            />
-          </div>
-
-          <div className="col-span-12">
-            <label htmlFor="Email" className="block text-xs font-medium text-gray-700">
-              Email
-            </label>
-
-            <input
-              type="email"
-              id="Email"
-              className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-            />
-          </div>
-
-          <div className="col-span-12">
-            <label htmlFor="Phone" className="block text-xs font-medium text-gray-700">
-              Phone
-            </label>
-
-            <input
-              type="tel"
-              id="Phone"
-              className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-            />
-          </div>
-
-
-          <div className="col-span-12">
-            <label htmlFor="Phone" className="block text-xs font-medium text-gray-700">
-              Location
-            </label>
-
-            <input
-              type="tel"
-              id="Phone"
+              id="address"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
               className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
             />
           </div>
@@ -206,9 +199,10 @@ const Checkout = () => {
                 value={deliveryOption}
                 onChange={handleDeliveryOptionChange}
               >
-                <option value=""> -- Select Delivery --</option>
-                <option value="BEU">BEU</option>
-                <option value="ASBEZA">ASBEZA</option>
+               <option value="">-- Select Delivery --</option>
+              {delivery&& delivery.map(d => (
+                <option key={d.id} value={d.id}>{d.name}</option>
+              ))}
               </select>
             </div>
        
@@ -219,11 +213,8 @@ const Checkout = () => {
               <select
                 id="deliveryOptions"
                 className="block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                value={deliveryOption}
-                onChange={handleDeliveryOptionChange}
               >
-                <option value=""> -- Select Delivery --</option>
-                <option value="telebirr">Telebirr</option>
+                <option value=""> -- Select Payment --</option>
                 <option value="chapa">Chapa</option>
               </select>
             </div>

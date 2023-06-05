@@ -132,7 +132,7 @@ const navItems = [
     },
     {
       id:25,
-      text: "Performance",
+      text: "Messages",
       icon: <TrendingUpOutlined />,
     },
   ];

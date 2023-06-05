@@ -194,14 +194,12 @@ const Order = () => {
             <CircularProgress />
           </Box>
         ) : (
-          <Box sx={{ width: '100%', overflowX: 'auto' }}>
             <DataGrid
               getRowId={(row) => row.id}
               rows={orders}
               columns={columns}
               onRowClick={handleRowClick}
             />
-          </Box>
         )}
          <CoffeeForm
           role={selectedProduct}

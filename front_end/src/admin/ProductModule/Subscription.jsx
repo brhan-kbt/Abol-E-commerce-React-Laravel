@@ -1,6 +1,6 @@
 import { Add, Delete, Edit } from '@mui/icons-material';
 import { Box, Button, CircularProgress, IconButton } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DataGrid } from "@mui/x-data-grid";
 import axiosClient from '../../axios';
 import Header from '../../Layout/Header';
@@ -10,6 +10,9 @@ const Subscription = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [errors,setErrors]=useState({});
+  const [subscriptions,setSubscriptions]=useState('');
+
 
   const handleSubscriptionFormSubmit = (subscription) => {
     if (subscription.id) {
@@ -20,10 +23,28 @@ const Subscription = () => {
         .then(response => {
           console.log(response);
           handleDialogClose();
+          axiosClient
+          .get(`/subscriptions/`)
+          .then(response => {
+            console.log('Subscripton:',response.data);
+            // Handle successful deletion
+            setSubscriptions(response.data);
+            setIsLoading(false);
+          })
+          .catch(error => {
+            // Handle errors
+            console.error(error);
+            setIsLoading(false);
+
+          });
         })
         .catch(error => {
+          if (error && error.response && error.response.data) {
+            setErrors(error.response.data.errors);
+            console.log(error.response.data.errors);
+          }
           console.error(error);
-        });
+          });
     } else {
       // subscription doesn't have an ID, perform add operation
       console.log("Add Subscription:", subscription);
@@ -32,10 +53,29 @@ const Subscription = () => {
         .then(response => {
           console.log(response);
           handleDialogClose();
+          axiosClient
+          .get(`/subscriptions/`)
+          .then(response => {
+            console.log('Subscripton:',response.data);
+            // Handle successful deletion
+            setIsLoading(false);
+
+            setSubscriptions(response.data);
+          })
+          .catch(error => {
+            // Handle errors
+            console.error(error);
+            setIsLoading(false);
+
+          });
         })
         .catch(error => {
+          if (error && error.response && error.response.data) {
+            setErrors(error.response.data.errors);
+            console.log(error.response.data.errors);
+          }
           console.error(error);
-        });
+          });
     }
   };
 
@@ -56,6 +96,23 @@ const Subscription = () => {
     }
   };
 
+
+
+  useEffect(() => {
+    axiosClient
+    .get(`/subscriptions/`)
+    .then(response => {
+      console.log('Subscripton:',response.data);
+      // Handle successful deletion
+      setSubscriptions(response.data);
+    })
+    .catch(error => {
+      // Handle errors
+      console.error(error);
+    });
+  }, [])
+  
+
   const handleEdit = (subscription) => {
     setSelectedSubscription(subscription);
     setOpenDialog(true);
@@ -66,26 +123,27 @@ const Subscription = () => {
     setOpenDialog(false);
   };
 
-  const subscriptions = [
-    {
-      id: 1,
-      subscriptionName: 'Basic',
-      subscriptionPrice: 10000,
-      features: ['Post 10', 'Post1']
-    },
-    {
-      id: 2,
-      subscriptionName: 'Standard',
-      subscriptionPrice: 20000,
-      features: ['Post 15', 'Post1']
-    },
-    {
-      id: 3,
-      subscriptionName: 'Premium',
-      subscriptionPrice: 30000,
-      features: ['Post 15', 'Post1']
-    }
-  ];
+ 
+  // const subscriptions = [
+  //   {
+  //     id: 1,
+  //     subscriptionName: 'Basic',
+  //     subscriptionPrice: 10000,
+  //     features: ['Post 10', 'Post1']
+  //   },
+  //   {
+  //     id: 2,
+  //     subscriptionName: 'Standard',
+  //     subscriptionPrice: 20000,
+  //     features: ['Post 15', 'Post1']
+  //   },
+  //   {
+  //     id: 3,
+  //     subscriptionName: 'Premium',
+  //     subscriptionPrice: 30000,
+  //     features: ['Post 15', 'Post1']
+  //   }
+  // ];
 
   const columns = [
     {
@@ -107,6 +165,17 @@ const Subscription = () => {
       field: "features",
       headerName: "Subscription Features",
       flex: 0.5,
+      renderCell: (params) => {
+        let features = [];
+        try {
+          features = JSON.parse(params.value);
+        } catch (error) {
+          console.error("Error parsing features:", error);
+        }
+        return features.map((feature, index) => (
+          <div key={index}>{feature}</div>
+        ));
+      },
     },
     {
       field: "actions",
@@ -197,6 +266,7 @@ const Subscription = () => {
           onClose={handleDialogClose}
           handleEdit={handleSubscriptionFormSubmit}
           handleAdd={handleSubscriptionFormSubmit}
+          errors={errors}
         />
       </Box>
     </>

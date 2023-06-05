@@ -22,7 +22,6 @@ class UserAccountResource extends JsonResource
             'coffee_brand_owner' => new CoffeeBrandOwnerResource($this->coffeeBrandOwner),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'products' => ProductResource::collection($this->products),
         ];
     }
 }

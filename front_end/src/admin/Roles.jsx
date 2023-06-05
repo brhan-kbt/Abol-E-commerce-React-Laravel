@@ -21,6 +21,8 @@ const Role = () => {
            axiosClient.put(`/roles/${role.id}`, role)
              .then(response => {
                console.log(response)
+              handleDialogClose();
+
              })
              .catch(error => {
                console.error(error);
@@ -30,6 +32,8 @@ const Role = () => {
           console.log("Add Role:", role);
            axiosClient.post('/roles', role)
              .then(response => {
+              handleDialogClose();
+
                console.log(response)
              })
              .catch(error => {

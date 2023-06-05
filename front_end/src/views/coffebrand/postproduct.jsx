@@ -8,14 +8,30 @@ import ProductForm from './forms/productForm';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useStateContext } from '../../contexts/ContextProvider';
+import { Navigate } from 'react-router-dom';
 
 const Product = () => {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const {currentUser}=useStateContext();
+    const {currentUser,userToken}=useStateContext();
 
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
+    const [errors,setErrors]=useState({});
+
+    if (!userToken) {
+      return <Navigate to="/login" />;
+  }
+
+    if (currentUser.role.name !== 'coffeebrand') {
+      if (currentUser.role.name === 'admin') {
+        return <Navigate to="/dashboard" />;
+      } else if (currentUser.role.name === 'customer') {
+        return <Navigate to="/customer/dashboard" />;
+      } else {
+        return <Navigate to="/login" />;
+      }
+    }
 
     const handleProductFormSubmit = (product) => {
         if (product.id) {
@@ -24,10 +40,17 @@ const Product = () => {
            axiosClient.put(`/products/${product.id}`, product)
              .then(response => {
                console.log(response)
+               fetchData();
                handleDialogClose();
+               
              })
              .catch(error => {
+              if (error && error.response && error.response.data) {
+                setErrors(error.response.data.errors);
+                console.log(error.response.data.errors);
+              }
                console.error(error);
+               
              });
         } else {
           // product doesn't have an ID, perform add operation
@@ -35,22 +58,46 @@ const Product = () => {
            axiosClient.post('/products', product)
              .then(response => {
                console.log(response)
+               fetchData();
+               handleDialogClose();
              })
              .catch(error => {
+              if (error && error.response && error.response.data) {
+                setErrors(error.response.data.errors);
+                console.log(error.response.data.errors);
+              }
                console.error(error);
-             });
+              
+              });
         }
       }
       
+      const fetchData = () => {
+        setIsLoading(true); // Show loading state
+        axiosClient.get(`/products/user/${currentUser.id}`)
+          .then(response => {
+            const usersData= response.data.data; 
+            console.log('ProductsOfUser:',usersData.data);
+            setUsers(usersData);
+            setIsLoading(false);
+          })
+          .catch(error => {
+            console.error(error);
+            setIsLoading(false)
+          });
+      };
+
 
       const deleteRow = (id) => {
         // Display a confirmation dialog
-        if (window.confirm("Are you sure you want to delete this user?")) {
+        if (window.confirm("Are you sure you want to delete this product?")) {
           console.log("Deleted id:", id);
           axiosClient
             .delete(`/products/${id}`)
             .then((response) => {
               console.log(response);
+                fetchData();
+               handleDialogClose();
               // Handle successful deletion
               
             })
@@ -63,18 +110,6 @@ const Product = () => {
       
 
     useEffect(() => {
-        axiosClient.get('/products')
-          .then(response => {
-            const usersData= response.data; 
-            console.log('Products',usersData);
-            setUsers(usersData);
-            setIsLoading(false);
-          })
-          .catch(error => {
-            console.error(error);
-            setIsLoading(false)
-          });
-
           axiosClient.get(`/products/user/${currentUser.id}`)
           .then(response => {
             const usersData= response.data.data; 
@@ -89,8 +124,9 @@ const Product = () => {
       }, []); 
       console.log(users);
 
-      const handleEdit = (user) => {
-        setSelectedProduct(user);
+      const handleEdit = (post) => {
+        console.log(post);
+        setSelectedProduct(post);
         setOpenDialog(true);
       };
     
@@ -238,6 +274,7 @@ const Product = () => {
           onClose={handleDialogClose}
           handleEdit={handleProductFormSubmit}
           handleAdd={handleProductFormSubmit}
+          errors={errors}
         />
     </Box>
     <Footer/>

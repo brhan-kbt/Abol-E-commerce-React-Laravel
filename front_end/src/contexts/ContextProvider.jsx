@@ -11,6 +11,7 @@ const StateContext = createContext({
   setUserToken: () => {},
   setSelectedProduct: () => {},
   addToCart: () => {},
+  removeAllCart: () => {},
 });
 
 
@@ -68,6 +69,15 @@ export const ContextProvider = ({ children }) => {
       setCartItems(updatedCart);
     }
   };
+
+  const removeAllCart = () => {
+    // Clear the state
+    setCartItems([]);
+    
+    // Remove from local storage
+    localStorage.removeItem("cartItems");
+  };
+  
   
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
@@ -85,6 +95,7 @@ export const ContextProvider = ({ children }) => {
           setCartItems,
           cartItems,
           addToCart,
+          removeAllCart
         }}
     >
       {children}

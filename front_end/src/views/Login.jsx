@@ -12,7 +12,7 @@ export default function Login() {
     remember: false, // Initialize remember to false
   });
   const {currentUser,userToken,setCurrentUser,setUserToken} = useStateContext();
-
+const [error,setError]=useState('');
   const router=useNavigate();
 
   const handleInputChange = (e) => {
@@ -59,8 +59,7 @@ export default function Login() {
         }
       })
       .catch((error) => {
-        // Handle login error
-        console.error(error.response.data);
+        setError(error.response.data.error);
       });
   };
 
@@ -73,6 +72,9 @@ export default function Login() {
           </h2>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm rounded-lg shadow-lg p-10 pt-0">
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {error &&
+            <small className="font-bold  text-red-500">{error}</small>            
+            }
             <div>
               <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
               Username
@@ -118,18 +120,13 @@ export default function Login() {
                   onChange={handleRememberChange}
                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                 />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  Remember me
-                </label>
+               
               </div>
-                <div className="text-sm mt-3">
+                {/* <div className="text-sm mt-3">
                   <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
                     Forgot password?
                   </a>
-                </div>
+                </div> */}
             </div>
 
             <div>

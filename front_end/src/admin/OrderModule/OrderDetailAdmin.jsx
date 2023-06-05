@@ -48,7 +48,7 @@ const OrderDetailAdmin = () => {
           >
             <CardContent>
               <Typography gutterBottom variant="h4" component="div" sx={{ fontWeight: '700' }}>
-                Unit Identity
+                Order Detail
               </Typography>
               {selectedRowData && (
                 <Box>
@@ -67,6 +67,28 @@ const OrderDetailAdmin = () => {
             </CardContent>
           </Card>
         </Grid>
+        <Grid xs={12} md={6} md:sx={{ paddingRight: '0px' }} paddingRight={5}>
+          <Card
+            variant="outlined"
+            sx={{
+              backgroundColor: '',
+              boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.8)',
+            }}
+          >
+            <CardContent>
+              <Typography gutterBottom variant="h4" component="div" sx={{ fontWeight: '700' }}>
+                Delivery Entity
+              </Typography>
+              {selectedRowData.delivery && (
+                <Box>
+                  <Typography>Delivery Id: {selectedRowData.delivery.id}</Typography>
+                  <Typography>Delivery Name: {selectedRowData.delivery.name}</Typography>
+                  <Typography>Delivery Address: {selectedRowData.delivery.address}</Typography>
+                </Box>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
 
         <Grid xs={12} paddingTop={5}>
           <Card
@@ -79,7 +101,7 @@ const OrderDetailAdmin = () => {
             <CardContent>
               <>
                 <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: '700' }}>
-                  Tenant History
+                  Products Detail
                 </Typography>
                 {selectedRowData.items.map((record, index) => (
                   <Card key={index} variant="outlined" sx={{ my: 1, boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}>

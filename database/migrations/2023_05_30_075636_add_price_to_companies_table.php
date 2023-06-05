@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->decimal('price', 8, 2)->after('photo'); // Add the new 'price' column after the 'photo' column
+        Schema::table('subscriptions', function (Blueprint $table) {
+            $table->json('features')->after('created_at'); // Add the new 'price' column after the 'photo' column
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('price'); // Drop the 'price' column if rolling back the migration
+        Schema::table('subscriptions', function (Blueprint $table) {
+            $table->dropColumn('features'); // Drop the 'price' column if rolling back the migration
         });
     }
 };

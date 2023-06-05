@@ -5,19 +5,20 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import axiosClient from '../../axios';
 import Header from '../../Layout/Header';
 import CoffeeForm from '../ProductModule/CoffeeForm';
+import DeliveryForm from './DeliveryForm';
 
 const Delivery = () => {
-    const [users, setUsers] = useState([]);
+    const [users, setDelivery] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedDelivery, setSelectedDelivery] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
 
-    const handleProductFormSubmit = (product) => {
-        if (product.id) {
-          // product has an ID, perform edit operation
-          console.log(" Edit Product:", product);
-           axiosClient.put(`/products/${product.id}`, product)
+    const handleDeliveryFormSubmit = (delivery) => {
+        if (delivery.id) {
+          // delivery has an ID, perform edit operation
+          console.log(" Edit delivery:", delivery);
+           axiosClient.put(`/delivery/${delivery.id}`, delivery)
              .then(response => {
                console.log(response)
                handleDialogClose();
@@ -26,9 +27,9 @@ const Delivery = () => {
                console.error(error);
              });
         } else {
-          // product doesn't have an ID, perform add operation
-          console.log("Add product:", product);
-           axiosClient.post('/products', product)
+          // delivery doesn't have an ID, perform add operation
+          console.log("Add delivery:", delivery);
+           axiosClient.post('/delivery', delivery)
              .then(response => {
                console.log(response)
              })
@@ -44,7 +45,7 @@ const Delivery = () => {
         if (window.confirm("Are you sure you want to delete this user?")) {
           console.log("Deleted id:", id);
           axiosClient
-            .delete(`/products/${id}`)
+            .delete(`/delivery/${id}`)
             .then((response) => {
               console.log(response);
               // Handle successful deletion
@@ -59,11 +60,11 @@ const Delivery = () => {
       
 
     useEffect(() => {
-        axiosClient.get('/products')
+        axiosClient.get('/delivery')
           .then(response => {
-            const usersData= response.data; 
-            console.log('Products',usersData);
-            setUsers(usersData);
+            const usersData= response.data.data; 
+            console.log('Delivery:',usersData);
+            setDelivery(usersData);
             setIsLoading(false);
           })
           .catch(error => {
@@ -74,16 +75,16 @@ const Delivery = () => {
       console.log(users);
 
       const handleEdit = (user) => {
-        setSelectedProduct(user);
+        setSelectedDelivery(user);
         setOpenDialog(true);
       };
     
       useEffect(() => {
-        // handleEdit(selectedProduct);
-      }, [selectedProduct]);
+        // handleEdit(selectedDelivery);
+      }, [selectedDelivery]);
     
       const handleDialogClose = () => {
-        setSelectedProduct(null);
+        setSelectedDelivery(null);
         setOpenDialog(false);
       };
 
@@ -94,42 +95,18 @@ const Delivery = () => {
         flex: 0.1,
     },
      {
-     field: "productName",
-     headerName: "Product Name",
+     field: "name",
+     headerName: "Delivery Name",
      flex: 0.5,
      },
      {
-      field: "photo",
-      headerName: "Product Photo",
+      field: "address",
+      headerName: "Delivery Address",
       flex: 0.5,
-      renderCell: (params) => {
-        return (
-          <img
-            
-            src={params.value}
-            alt="Product"
-            style={{ width: 50, height: 50,borderRadius:50 }}
-          />
-        );
-      },
+    
     },
-     {
-        field: "productType",
-        headerName: "Product Type",
-        flex: 0.5,
-    },
-    {
-        field: "productWeight",
-        headerName: "Product Weight",
-        flex: 0.5,
-    }, 
+    
         
-    {
-     field: "brand",
-     headerName: "Product Brand",
-     flex: 0.5,
-     },
-     
     {
         field: "actions",
         headerName: "Actions",
@@ -149,7 +126,7 @@ const Delivery = () => {
     },
     ];
     const handleButtonClick = () => {
-        setSelectedProduct({}); // Reset selectedProduct to null
+        setSelectedDelivery({}); // Reset selectedDelivery to null
         console.log('clicked');
         setOpenDialog(true);
 
@@ -160,10 +137,10 @@ const Delivery = () => {
     <Box m="1.5rem 2.5rem ">
         <div className='flex justify-between'>
         <Header title="Order" subtitle="List of orders" />
-        {/* <Button sx={{ backgroundColor: "green",height:'40px', color:'white','&:hover': {
+        <Button sx={{ backgroundColor: "green",height:'40px', color:'white','&:hover': {
             backgroundColor: 'darkgreen',
             color: 'lightGrey',
-            },}} className='flex gap-2' onClick={handleButtonClick}><Add/> Add Product</Button> */}
+            },}} className='flex gap-2' onClick={handleButtonClick}><Add/> Add Delivery</Button>
         </div>
    </Box>
    <Box
@@ -217,12 +194,12 @@ const Delivery = () => {
             />
           </Box>
         )}
-         <CoffeeForm
-          role={selectedProduct}
+         <DeliveryForm
+          delivery={selectedDelivery}
           openDialog={openDialog}
           onClose={handleDialogClose}
-          handleEdit={handleProductFormSubmit}
-          handleAdd={handleProductFormSubmit}
+          handleEdit={handleDeliveryFormSubmit}
+          handleAdd={handleDeliveryFormSubmit}
         />
     </Box>
   </>
