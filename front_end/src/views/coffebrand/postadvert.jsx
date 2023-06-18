@@ -221,7 +221,7 @@ if (currentUser.role.name !== 'coffeebrand') {
         <Button sx={{ backgroundColor: "green",height:'40px', color:'white','&:hover': {
             backgroundColor: 'darkgreen',
             color: 'lightGrey',
-            },}} className='flex gap-2' onClick={handleButtonClick}><Add/> Add Product</Button>
+            },}} className='flex gap-2' onClick={handleButtonClick}><Add/> Add Advert</Button>
         </div>
     </Box>
     <Box

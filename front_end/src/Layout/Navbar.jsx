@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import logo from '../assets/toplogo.png';
 
 import {
-    LightModeOutlined,
+   LightModeOutlined,
     DarkModeOutlined,
     Menu as MenuIcon,
     Search,
