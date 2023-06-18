@@ -31,6 +31,8 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import Shop from "./views/Shop";
 import ShopDetail from "./views/ShopDetail";
+import DeliveryPage from "./admin/DeliveryPage";
+import DeliveryDetailPage from "./admin/DeliveryDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -82,6 +84,14 @@ const router = createBrowserRouter([
   {
     path: "/about",
     element: <About />,
+  },
+  {
+    path: "/delivery",
+    element: <DeliveryPage />,
+  },
+  {
+    path: "/delivery/:id",
+    element: <DeliveryDetailPage />,
   },
   {
     path: "/contact",

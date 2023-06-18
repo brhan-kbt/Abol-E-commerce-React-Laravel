@@ -84,7 +84,9 @@ const Navbar = () => {
                 Home
                 </Link>
             </li>
-            <li>
+
+            { currentUser && currentUser.role && currentUser.role.name != 'coffeebrand' &&
+           <li>
                 <Link
                 className={`block p-4 text-medium font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded ${
                     isActive ? 'bg-blue-50 text-blue-600' : ''
@@ -94,9 +96,36 @@ const Navbar = () => {
                 Shop
                 </Link>
             </li>
+            }
+
+
+            { currentUser && currentUser.role && currentUser.role.name === 'coffeebrand' &&
+            <>
+            <li>
+            <Link
+                className={`block p-4 text-medium font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded ${
+                isActive ? 'bg-blue-50 text-blue-600' : ''
+            }`}
+              to="/coffee-brand/post"
+            >
+                My Products
+            </Link>
+            </li>
+            <li>
+            <Link
+                className={`block p-4 text-medium font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded ${
+                  isActive ? 'bg-blue-50 text-blue-600' : ''
+              }`}
+              to="/coffee-brand/advert"
+            >
+                My Adverts
+            </Link>
+            </li>
+            </>
+            }
             <li>
                 <Link
-                className={`block p-4 text-medium font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded ${
+                className={`block p-1 text-medium font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded ${
                     isActive ? 'bg-blue-50 text-blue-600' : ''
                 }`}
                 to="/about"
@@ -118,15 +147,19 @@ const Navbar = () => {
             
             {user ? (
               <>
+
               <div className='flex justify-center gap-8 items-center'>
-              <Link to="/cart" className="relative">
+
+             { currentUser && currentUser.role && currentUser.role.name != 'coffeebrand' &&
+            
+             <Link to="/cart" className="relative">
                 <ShoppingCart sx={{width:'40px'}} className="text-[#B5681B]  rounded-full" />
                 {cartTotal > 0 && (
                   <span className="absolute top-0 right-0 -mt-1 -mr-1 px-2 py-1   text-white text-xs font-semibold rounded-full">
                     {cartTotal}
                   </span>
                 )}
-              </Link>
+              </Link>}
                  <div className="hidden lg:inline-block relative" data-te-dropdown-ref>
 
                 <button
@@ -162,7 +195,7 @@ const Navbar = () => {
                         </Link>
                       </li>
                       <li></li>
-                        <li>
+                        {/* <li>
                           <Link
                             className="block w-full whitespace-nowrap bg-transparent px-10 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
                             to="/coffee-brand/post"
@@ -181,7 +214,7 @@ const Navbar = () => {
                             <Add />
                             My Adverts
                           </Link>
-                        </li>
+                        </li> */}
 
                         {/* <li>
                           <Link
@@ -208,16 +241,7 @@ const Navbar = () => {
                           My Dashboard
                         </Link>
                       </li>
-                      {/* <li>
-                      <Link
-                        className="block w-full  whitespace-nowrap bg-transparent px-10 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-                        to="/profile"
-                        data-te-dropdown-item-ref
-                      >
-                        <Settings />
-                        Setting
-                      </Link>
-                    </li> */}
+                      
                     </>
                     )}
 
@@ -299,6 +323,26 @@ const Navbar = () => {
                     >
                         Shop
                     </Link>
+                  { currentUser && currentUser.role && currentUser.role.name === 'coffeebrand' &&
+                    <>
+                    <Link
+                        className={`block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded ${
+                        isActive ? 'bg-blue-50 text-blue-600' : ''
+                        }`}
+                      to="/coffee-brand/post"
+                    >
+                        My Products
+                    </Link>
+                    <Link
+                        className={`block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded ${
+                        isActive ? 'bg-blue-50 text-blue-600' : ''
+                        }`}
+                      to="/coffee-brand/advert"
+                    >
+                        My Adverts
+                    </Link>
+                    </>
+                    }
                     </li>
                     <li className="mb-1">
                     <Link
@@ -333,7 +377,7 @@ const Navbar = () => {
                         </Link>
                       </li>
                       <li></li>
-                        <li>
+                        {/* <li>
                           <Link
                             className="block w-full whitespace-nowrap bg-transparent pl-4  py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
                             to="/coffee-brand/post"
@@ -350,7 +394,7 @@ const Navbar = () => {
                           >
                             My Adverts
                           </Link>
-                        </li>
+                        </li> */}
 
                        
                       </>
