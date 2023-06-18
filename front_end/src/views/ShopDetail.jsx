@@ -58,10 +58,10 @@ const ShopDetail = () => {
             <div class="flex mb-4">
               <Rating value={product.average_rating}/>
             </div>
-            <p class="leading-relaxed">Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.</p>
+            <p class="leading-relaxed">This packaged coffee is of great quality from the fertile farms of Ethiopian highlands. It is proccessed and packaged keeping cleanliness as priority. </p>
           
             <div class="flex">
-              <span class="title-font font-medium text-2xl text-gray-900">58.00 Birr / 1kg</span>
+              <span class="title-font font-medium text-2xl text-gray-900">{product.product.price}</span>
               <button class="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded"  onClick={handleAddToCart}>Add to Cart</button>
             </div>
           </div>

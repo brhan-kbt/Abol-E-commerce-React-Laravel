@@ -59,7 +59,7 @@ const [error,setError]=useState('');
         }
       })
       .catch((error) => {
-        setError(error.response.data.error);
+        setError(error);
       });
   };
 
