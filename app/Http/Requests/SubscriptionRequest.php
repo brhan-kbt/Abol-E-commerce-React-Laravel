@@ -25,6 +25,7 @@ class SubscriptionRequest extends FormRequest
             'subscriptionName' => 'required|string',
             'subscriptionPrice' => 'required|numeric',
             'features' => ['required', 'array'],
+            'product_limit'=>'required|numeric',
             'features.*' => 'string',
         ];
     }

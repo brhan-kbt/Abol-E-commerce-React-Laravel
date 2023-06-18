@@ -33,6 +33,8 @@ const Navbar = () => {
       console.log('False');
     }
   }, [currentUser]);
+
+  console.log('User:',user);
   
   const navigate=useNavigate();
 
@@ -85,7 +87,7 @@ const Navbar = () => {
                 </Link>
             </li>
 
-            { currentUser && currentUser.role && currentUser.role.name != 'coffeebrand' &&
+            {  currentUser && currentUser.role && currentUser.role.name == 'customer'  &&
            <li>
                 <Link
                 className={`block p-4 text-medium font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded ${
@@ -98,6 +100,18 @@ const Navbar = () => {
             </li>
             }
 
+      {  !user  &&
+           <li>
+                <Link
+                className={`block p-4 text-medium font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded ${
+                    isActive ? 'bg-blue-50 text-blue-600' : ''
+                }`}
+                to="/shop"
+                >
+                Shop
+                </Link>
+            </li>
+            }
 
             { currentUser && currentUser.role && currentUser.role.name === 'coffeebrand' &&
             <>
@@ -150,7 +164,7 @@ const Navbar = () => {
 
               <div className='flex justify-center gap-8 items-center'>
 
-             { currentUser && currentUser.role && currentUser.role.name != 'coffeebrand' &&
+             {  currentUser && currentUser.role && currentUser.role.name != 'coffeebrand'  &&
             
              <Link to="/cart" className="relative">
                 <ShoppingCart sx={{width:'40px'}} className="text-[#B5681B]  rounded-full" />

@@ -28,16 +28,19 @@ class SubscriptionController extends Controller
         $validatedData = $request->validate([
             'subscriptionName' => 'required',
             'subscriptionPrice' => 'required|numeric',
+            'product_limit' => 'required|numeric',
             'features' => 'required|array',
         ]);
         
         $subscriptionName = $validatedData['subscriptionName'];
         $subscriptionPrice = $validatedData['subscriptionPrice'];
+        $product_limit = $validatedData['product_limit'];
         $features = $validatedData['features'];
         
         $subscription = new Subscription();
         $subscription->subscriptionName = $subscriptionName;
         $subscription->subscriptionPrice = $subscriptionPrice;
+        $subscription->product_limit = $product_limit;
         $subscription->features = json_encode($features);
         $subscription->save();
         return response()->json(new SubscriptionResource($subscription), 201);

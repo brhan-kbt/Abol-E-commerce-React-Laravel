@@ -18,6 +18,7 @@ const Product = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [errors,setErrors]=useState({});
+    const [limit_errors,setLimitErrors]=useState('');
 
     if (!userToken) {
       return <Navigate to="/login" />;
@@ -49,6 +50,11 @@ const Product = () => {
                 setErrors(error.response.data.errors);
                 console.log(error.response.data.errors);
               }
+
+              if (error && error.response && error.response.data && error.response.data.limit_error) {
+                setLimitErrors(error.response.data.errors.limit_error);
+                console.log(error.response.data.errors.limit_error);
+              }
                console.error(error);
                
              });
@@ -58,6 +64,10 @@ const Product = () => {
            axiosClient.post('/products', product)
              .then(response => {
                console.log(response)
+               if(response &&  response.data &&  response.data.limit_error){
+                setLimitErrors(response.data.limit_error);
+                console.log(response.data.limit_error);
+               }
                fetchData();
                handleDialogClose();
              })
@@ -66,6 +76,8 @@ const Product = () => {
                 setErrors(error.response.data.errors);
                 console.log(error.response.data.errors);
               }
+
+              
                console.error(error);
               
               });
@@ -218,6 +230,11 @@ const Product = () => {
             color: 'lightGrey',
             },}} className='flex gap-2' onClick={handleButtonClick}><Add/> Add Product</Button>
         </div>
+        {
+          limit_errors &&(
+            <h3 className='text-red-500 text-center font-bold'>{limit_errors}</h3>
+          )
+        }
     </Box>
     <Box
           padding='40px'

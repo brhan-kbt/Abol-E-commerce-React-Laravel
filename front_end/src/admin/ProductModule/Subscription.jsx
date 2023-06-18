@@ -162,6 +162,11 @@ const Subscription = () => {
       flex: 0.5,
     },
     {
+      field: "product_limit",
+      headerName: "Product Limit",
+      flex: 0.5,
+    },
+    {
       field: "features",
       headerName: "Subscription Features",
       flex: 0.5,

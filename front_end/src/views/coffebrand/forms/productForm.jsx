@@ -27,6 +27,7 @@ export default function ProductForm({
     productWeight: product?.productWeight || '',
     brand: product?.brand || '',
     user_id:currentUser.id,
+    subscription_id:currentUser.coffee_brand_owner.subscription.id,
     photo: null,
   });
 
@@ -34,6 +35,7 @@ export default function ProductForm({
     setOpen(true);
   };
 
+  console.log('Subscription:',currentUser.coffee_brand_owner.subscription.id);
   const handleClose = () => {
     setOpen(false);
     onClose();
@@ -50,6 +52,7 @@ export default function ProductForm({
         brand: product.brand || '',
         price: product.price || '',
         user_id:product.user_id,
+        subscription_id:currentUser.coffee_brand_owner.subscription.id,
         status:0,
         photo: null,
       });
@@ -72,6 +75,7 @@ export default function ProductForm({
       formData.append('price', updatedFormData.price);
       formData.append('photo', updatedFormData.photo);
       formData.append('user_id', currentUser.id);
+      formData.append('subscription_id', currentUser.coffee_brand_owner.subscription.id);
       formData.append('status', 0);
 
       console.log(currentUser.id);

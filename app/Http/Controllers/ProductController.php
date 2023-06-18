@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -42,32 +43,62 @@ class ProductController extends Controller
    
    
 
-    public function store(ProductRequest $request)
-    {
-        $validatedData = $request->validated();
+   public function store(ProductRequest $request)
+{
+    $validatedData = $request->validated();
 
-        
-        if ($request->hasFile('photo')) {
-            $photo = $request->file('photo');
-            $extension = $photo->getClientOriginalExtension();
-            $filename = 'product_' . time() . '.' . $extension;
-            $photoPath = $photo->storeAs('public/products', $filename);
-            $validatedData['photo'] = url(Storage::url($photoPath));
-        }
-        
+    if ($request->hasFile('photo')) {
+        $photo = $request->file('photo');
+        $extension = $photo->getClientOriginalExtension();
+        $filename = 'product_' . time() . '.' . $extension;
+        $photoPath = $photo->storeAs('public/products', $filename);
+        $validatedData['photo'] = url(Storage::url($photoPath));
+    }
 
-        // Retrieve the user by user_id
+    // Retrieve the user by user_id
     try {
         $userToAssociate = User::findOrFail($request->input('user_id'));
     } catch (ModelNotFoundException $exception) {
         return response()->json(['error' => 'User not found'], 404);
     }
 
+
+    
+
+    // Check the user's subscription limit
+    if($request->subscription_id){
+        $subscription =Subscription::findOrFail($request->subscription_id);
+        
+        $productLimit = 0;
+
+        
+        if ($subscription) {
+            switch ($subscription->subscriptionName) {
+                case 'Basic':
+                    $productLimit = $subscription->product_limit;
+                    break;
+                case 'Standard':
+                    $productLimit = $subscription->product_limit;;
+                    break;
+                case 'Premium':
+                    $productLimit = $subscription->product_limit;;
+                    break;
+                default:
+                    $productLimit = 0;
+                    break;
+            }
+        }
+
+        if ($productLimit > 0 && $userToAssociate->products->count() >= $productLimit) {
+            return response()->json(['limit_error' => 'You have reached the maximum product limit for your subscription.']);
+        }
+    }
+
     // Associate the user with the product
     $product = $userToAssociate->products()->create($validatedData);
 
     return response()->json($product, 201);
-    }
+}
     
     public function singleProduct($id)
     {

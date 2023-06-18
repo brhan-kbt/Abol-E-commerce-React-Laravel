@@ -21,6 +21,7 @@ export default function SubscriptionForm({
   const [formData, setFormData] = useState({
     subscriptionName: subscription?.subscriptionName || '',
     subscriptionPrice: subscription?.subscriptionPrice || '',
+    product_limit: subscription?.product_limit || '',
     features: subscription?.features ? JSON.parse(subscription.features) : [],
   });
 
@@ -39,6 +40,7 @@ export default function SubscriptionForm({
       setFormData({
         subscriptionName: subscription.subscriptionName || '',
         subscriptionPrice: subscription.subscriptionPrice || '',
+        product_limit: subscription.product_limit || '',
         features: subscription.features ? JSON.parse(subscription.features) : [],
       });
       setId(subscription.id);
@@ -114,6 +116,24 @@ export default function SubscriptionForm({
                 
                 <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
                   {errors&&errors.subscriptionPrice}
+                  </small>}
+
+                  <TextField
+                id="product_limit"
+                label="Product Limit"
+                type="number"
+                name="product_limit"
+                value={formData.product_limit}
+                onChange={handleFormChange}
+                autoComplete="off"
+                fullWidth
+                required
+                sx={{ marginTop: '16px' }}
+              />
+               {errors.product_limit&&
+                
+                <small className='font-bold text-red-500' style={{marginTop:'-50px'}}>
+                  {errors&&errors.product_limit}
                   </small>}
               <TextField
                 id="features"
